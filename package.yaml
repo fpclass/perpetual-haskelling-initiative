@@ -30,4 +30,5 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
-    dependencies: []
+    dependencies:
+    - aeson

@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 761cbe82b849f9f64e714aed5304013cc80dea18ba6a0f374fded373e4f0e79e
+-- hash: 28f45ae527fe38941e6e23fbc66e5bbbfad006755141ab200d7a85f3fcdd4d32
 
 name:           perpetual-haskelling-initiative
 version:        0.1.0.0
@@ -32,5 +32,6 @@ executable phi
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
-      base
+      aeson
+    , base
   default-language: Haskell2010
