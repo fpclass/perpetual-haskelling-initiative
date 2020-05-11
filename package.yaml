@@ -32,3 +32,4 @@ executables:
     - -Wall
     dependencies:
     - aeson
+    - filepath

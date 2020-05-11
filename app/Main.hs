@@ -12,6 +12,7 @@ module Main ( main ) where
 import System.IO
 import Data.Char (toUpper)
 import Data.Aeson
+import System.FilePath
 
 -- Temporary Definitions - When Card/Deck are defined in the library this will be
 -- removed
@@ -23,10 +24,10 @@ loadDeck :: IO (Maybe Deck)
 loadDeck = do
     putStr "Enter Filename (without extension): "
     fn <- getLine
-    deck <- decodeFileStrict $ fn ++ ".json"
+    deck <- decodeFileStrict $ fn <.> "json"
 
     case deck of
-        Nothing -> putStrLn $ "Error Loading Deck: " ++ fn ++ ".json"
+        Nothing -> putStrLn $ "Error Loading Deck: " ++ (fn <.> ".json")
         _       -> putStrLn "Deck loaded successfully"
 
     return deck  
@@ -36,7 +37,7 @@ saveDeck :: Deck -> IO ()
 saveDeck d = do
     putStr "Enter Filename (without extension): "
     fn <- getLine
-    encodeFile (fn++".json") d
+    encodeFile (fn <.> "json") d
 
 
 -- | `createNewDeck` is a computation which tries to create a new deck
