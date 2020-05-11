@@ -20,7 +20,10 @@ type Deck = [Card]
 
 -- | `loadDeck` is a computation which tries to load a deck from disk.
 loadDeck :: IO (Maybe Deck)
-loadDeck = undefined
+loadDeck = do
+    putStr "Enter Filename (without extension): "
+    fn <- getLine
+    decodeFileStrict $ fn ++ ".json" 
 
 -- | `saveDeck`is a function which tries to save a deck to disk
 saveDeck :: Deck -> IO ()
