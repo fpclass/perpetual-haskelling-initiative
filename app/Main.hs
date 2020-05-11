@@ -71,8 +71,7 @@ menu deck = do
     let deckOptions Nothing = [] 
         deckOptions _       = ["\tS) Save Deck", "\tE) Edit Current Deck", "\tP) Play"]
 
-    putStrLn "Welcome to the Perpetual Haskelling Initiative!\n"
-    putStrLn "Menu:"
+    putStrLn "\nMenu:"
     putStrLn "\tL) Load Deck"
     putStrLn "\tC) Create New Deck"
     mapM_ putStrLn $ deckOptions deck
@@ -104,5 +103,6 @@ main = do
     hSetBuffering stdout NoBuffering
     hSetBuffering stdin  NoBuffering
 
+    putStrLn "Welcome to the Perpetual Haskelling Initiative!"
     menu Nothing
 -------------------------------------------------------------------------------
