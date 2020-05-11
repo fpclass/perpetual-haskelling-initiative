@@ -1,0 +1,5 @@
+# the stack resolver version to use (this is the one on the DCS machines)
+resolver: lts-14.12
+
+packages:
+- .
