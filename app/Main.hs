@@ -11,6 +11,7 @@ module Main ( main ) where
 
 import System.IO
 import Data.Char (toUpper)
+import Data.Aeson
 
 -- Temporary Definitions - When Card/Deck are defined in the library this will be
 -- removed
@@ -23,7 +24,11 @@ loadDeck = undefined
 
 -- | `saveDeck`is a function which tries to save a deck to disk
 saveDeck :: Deck -> IO ()
-saveDeck = undefined
+saveDeck d = do
+    putStr "Enter Filename (without extension): "
+    fn <- getLine
+    encodeFile (fn++".json") d
+
 
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
