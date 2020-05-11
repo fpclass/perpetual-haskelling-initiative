@@ -4,8 +4,6 @@
 -- This source code is licensed under the MIT licence found in the           --
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
-{-# LANGUAGE DeriveGeneric #-}
-
 module Purestone.Paradigm ( Paradigm(..) ) where 
 
 import GHC.Generics
@@ -26,7 +24,7 @@ data Paradigm
     | Compiled
     | Pure 
     | Impure
-    deriving (Eq, Show, Read, Generic)
+    deriving (Eq, Show, Generic)
 
 instance FromJSON Paradigm
 instance ToJSON Paradigm

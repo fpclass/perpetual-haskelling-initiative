@@ -4,8 +4,6 @@
 -- This source code is licensed under the MIT licence found in the           --
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
-{-# LANGUAGE DeriveGeneric #-}
-
 module Purestone.Card ( Card(..) ) where 
 
 -------------------------------------------------------------------------------
@@ -30,7 +28,7 @@ data Card = Card {
     cardParadigms :: NonEmpty Paradigm,
     -- | The card's program.
     cardProgram :: Program
-} deriving (Eq, Show, Read, Generic)
+} deriving (Eq, Show, Generic)
 
 instance FromJSON Card
 instance ToJSON Card

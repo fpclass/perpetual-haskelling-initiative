@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f9d81f4c239066eb737a10ea5e98fc02627d8c27fa0fa5c3245375a7e784f3da
+-- hash: 4e49777432f44208f0c859d292441dd2b8cd47b9b515ff7f8428889f7ecebca5
 
 name:           perpetual-haskelling-initiative
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
       Paths_perpetual_haskelling_initiative
   hs-source-dirs:
       src
+  default-extensions: DeriveGeneric
   ghc-options: -W
   build-depends:
       aeson

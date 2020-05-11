@@ -27,6 +27,8 @@ library:
   source-dirs: src
   ghc-options:
       - -W
+  default-extensions:
+  - DeriveGeneric
 
 executables:
   phi:
