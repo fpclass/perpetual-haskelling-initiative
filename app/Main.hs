@@ -10,6 +10,7 @@
 module Main ( main ) where 
 
 import System.IO
+import Data.Char (toUpper)
 
 -- Temporary Definitions - When Card/Deck are defined in the library this will be
 -- removed
@@ -47,7 +48,7 @@ menu deck = do
 
     choice <- getLine
 
-    case choice of
+    case map toUpper choice of
         "L" -> loadDeck >>= menu
         "S" -> do
             saveDeck deck
