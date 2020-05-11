@@ -17,18 +17,23 @@ import Data.Char (toUpper)
 type Card = String
 type Deck = [Card]
 
+-- | `loadDeck` is a computation which tries to load a deck from disk.
 loadDeck :: IO (Maybe Deck)
 loadDeck = undefined
 
+-- | `saveDeck`is a function which tries to save a deck to disk
 saveDeck :: Deck -> IO ()
 saveDeck = undefined
 
+-- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
 createNewDeck = undefined
 
+-- | `editCurrentDeck` is a function which tries to edit the given deck
 editCurrentDeck :: Deck -> IO Deck
 editCurrentDeck = undefined
 
+-- | `play` is a function which tries to play the game with the given deck
 play :: Deck -> IO ()
 play = undefined
 
@@ -78,7 +83,7 @@ menu deck = do
             menu deck
 
 -------------------------------------------------------------------------------
--- | 'main' is the main entry point for this application.
+-- | `main` is the main entry point for this application.
 main :: IO ()
 main = do
     -- This prevents delays in outputting prompts and other strange issues
