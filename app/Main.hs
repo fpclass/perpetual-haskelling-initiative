@@ -13,6 +13,11 @@ module Main ( main ) where
 
 -- | 'main' is the main entry point for this application.
 main :: IO ()
-main = putStrLn "Hello World!"
+main = do
+    -- This prevents delays in outputting prompts and other strange issues
+    hSetBuffering stdout NoBuffering
+    hSetBuffering stdin  NoBuffering
+
+    putStrLn "Hello World!"
 
 -------------------------------------------------------------------------------
