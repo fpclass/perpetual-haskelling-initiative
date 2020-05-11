@@ -49,16 +49,15 @@ requireDeck deck f =
 menu :: Maybe Deck -> IO ()
 menu deck = do
     -- Determines whether to show options that require a deck to be present
-    let deckOptions = if deck == Nothing then 
-                          ""
-                      else
-                          "\tS) Save Deck\n\tE) Edit Current Deck\n\tP) Play"
+    let deckOptions Nothing = [] 
+        deckOptions _       = ["\tS) Save Deck", "\tE) Edit Current Deck", "\tP) Play"]
 
     putStrLn "Welcome to the Perpetual Haskelling Initiative!\n"
     putStrLn "Menu:"
     putStrLn "\tL) Load Deck"
     putStrLn "\tC) Create New Deck"
-    putStrLn $ deckOptions ++ "\tQ) Quit"
+    mapM_ putStrLn $ deckOptions deck
+    putStrLn "\tQ) Quit"
     putStr ">>> "
 
     choice <- getLine
