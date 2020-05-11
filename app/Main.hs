@@ -20,18 +20,32 @@ type Deck = [Card]
 loadDeck :: IO (Maybe Deck)
 loadDeck = undefined
 
-saveDeck :: Maybe Deck -> IO ()
+saveDeck :: Deck -> IO ()
 saveDeck = undefined
 
 createNewDeck :: IO Deck
 createNewDeck = undefined
 
-editCurrentDeck :: Maybe Deck -> IO Deck
+editCurrentDeck :: Deck -> IO Deck
 editCurrentDeck = undefined
 
-play :: Maybe Deck -> IO ()
+play :: Deck -> IO ()
 play = undefined
 
+-- | This function is used to ensure options that require a deck are not called
+--   without a deck. This is better than checking a Maybe Deck is not Nothing at 
+--   the start of all of these options.
+requireDeck :: Maybe Deck -> (Deck -> IO ()) -> IO ()
+requireDeck deck f =
+    case deck of 
+        Nothing -> do
+            putStrLn "This option requires a deck to be selected"
+            menu Nothing
+        Just d -> f d
+
+-- | This optionally takes a Deck and shows the user a menu of available options
+--   then runs the relavant function. Keeps running until the user uses the quit 
+--   option
 menu :: Maybe Deck -> IO ()
 menu deck = do
     -- Determines whether to show options that require a deck to be present
@@ -39,6 +53,7 @@ menu deck = do
                           ""
                       else
                           "\tS) Save Deck\n\tE) Edit Current Deck\n\tP) Play"
+
     putStrLn "Welcome to the Perpetual Haskelling Initiative!\n"
     putStrLn "Menu:"
     putStrLn "\tL) Load Deck"
@@ -50,14 +65,14 @@ menu deck = do
 
     case map toUpper choice of
         "L" -> loadDeck >>= menu
-        "S" -> do
-            saveDeck deck
-            menu deck
+        "S" -> requireDeck deck $ \d -> do
+            saveDeck d
+            menu $ Just d
         "C" -> createNewDeck >>= menu . Just
-        "E" -> editCurrentDeck deck >>= menu . Just
-        "P" -> do
-            play deck
-            menu deck
+        "E" -> requireDeck deck $ \d -> editCurrentDeck d >>= menu . Just
+        "P" -> requireDeck deck $ \d -> do
+            play d
+            menu $ Just d
         "Q" -> pure ()
         _ -> do
             putStrLn "Invalid Choice"
