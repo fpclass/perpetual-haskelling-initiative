@@ -1,0 +1,28 @@
+name: Haskell CI
+
+on:
+- push 
+- pull_request 
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        env:
+            PATH: $HOME/.local/bin:$PATH
+
+        steps:
+        - uses: actions/checkout@v1
+
+        - name: Install the Haskell Stack 
+          run: |
+            mkdir -p ~/.local/bin
+            curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+
+        - name: Install GHC 
+          run: |
+            stack --no-terminal --install-ghc setup
+
+        - name: Build Perpetual Haskelling Initiative
+          run: |
+            stack --no-terminal build --fast 
