@@ -21,6 +21,7 @@ description:         Perpetual Haskelling Initiative
 dependencies:
 - base 
 - text
+- aeson
 
 library:
   source-dirs: src

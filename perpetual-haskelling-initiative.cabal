@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 761cbe82b849f9f64e714aed5304013cc80dea18ba6a0f374fded373e4f0e79e
+-- hash: f9d81f4c239066eb737a10ea5e98fc02627d8c27fa0fa5c3245375a7e784f3da
 
 name:           perpetual-haskelling-initiative
 version:        0.1.0.0
@@ -24,6 +24,24 @@ source-repository head
   type: git
   location: https://github.com/fpclass/perpetual-haskelling-initiative
 
+library
+  exposed-modules:
+      Purestone
+      Purestone.Card
+      Purestone.Hand
+      Purestone.Language.Program
+      Purestone.Paradigm
+  other-modules:
+      Paths_perpetual_haskelling_initiative
+  hs-source-dirs:
+      src
+  ghc-options: -W
+  build-depends:
+      aeson
+    , base
+    , text
+  default-language: Haskell2010
+
 executable phi
   main-is: Main.hs
   other-modules:
@@ -32,5 +50,7 @@ executable phi
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
-      base
+      aeson
+    , base
+    , text
   default-language: Haskell2010
