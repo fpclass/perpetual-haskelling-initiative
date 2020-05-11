@@ -23,7 +23,13 @@ loadDeck :: IO (Maybe Deck)
 loadDeck = do
     putStr "Enter Filename (without extension): "
     fn <- getLine
-    decodeFileStrict $ fn ++ ".json" 
+    deck <- decodeFileStrict $ fn ++ ".json"
+
+    case deck of
+        Nothing -> putStrLn $ "Error Loading Deck: " ++ fn ++ ".json"
+        _       -> putStrLn "Deck loaded successfully"
+
+    return deck  
 
 -- | `saveDeck`is a function which tries to save a deck to disk
 saveDeck :: Deck -> IO ()
