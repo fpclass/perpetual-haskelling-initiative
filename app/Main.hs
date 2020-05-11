@@ -9,6 +9,8 @@
 -- Initiative executable.
 module Main ( main ) where 
 
+import System.IO
+
 -------------------------------------------------------------------------------
 
 -- | 'main' is the main entry point for this application.
