@@ -22,9 +22,9 @@ jobs:
           uses: actions/cache@v1
           with:
             path: ~/.stack
-            key: ${{ runner.os }}-lts-14.12-${{ hashFiles('package.yaml') }}
+            key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
             restore-keys: |
-                ${{ runner.os }}-lts-14.12
+                ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
                 ${{ runner.os }}
 
         - name: Install GHC 
