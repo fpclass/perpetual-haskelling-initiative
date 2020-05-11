@@ -17,6 +17,16 @@ jobs:
             curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
             echo "::add-path::$HOME/.local/bin"
 
+        - name: Cache .stack
+          id: cache-stack
+          uses: actions/cache@v1
+          with:
+            path: ~/.stack
+            key: ${{ runner.os }}-lts-14.12-${{ hashFiles('package.yaml') }}
+            restore-keys: |
+                ${{ runner.os }}-lts-14.12
+                ${{ runner.os }}
+
         - name: Install GHC 
           run: |
             stack --no-terminal --install-ghc setup
