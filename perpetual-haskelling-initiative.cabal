@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4e49777432f44208f0c859d292441dd2b8cd47b9b515ff7f8428889f7ecebca5
+-- hash: 4482b983ce4606cf293d2ce6644cb868bd972fadbaeb4d5992daef29800f33f0
 
 name:           perpetual-haskelling-initiative
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
       Purestone
       Purestone.Card
       Purestone.Hand
+      Purestone.JSON
       Purestone.Language.Program
       Purestone.Paradigm
   other-modules:

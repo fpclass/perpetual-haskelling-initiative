@@ -15,6 +15,7 @@ import GHC.Generics
 
 import Purestone.Paradigm
 import Purestone.Language.Program
+import Purestone.JSON
 
 -------------------------------------------------------------------------------
 
@@ -30,7 +31,12 @@ data Card = Card {
     cardProgram :: Program
 } deriving (Eq, Show, Generic)
 
-instance FromJSON Card
-instance ToJSON Card
+
+-- Define FromJSON and ToJSON instances for Card. genericParseJSON jsonOpts automatically 
+-- derives instance using the field name with the card prefix removed as the key
+instance FromJSON Card where
+    parseJSON = genericParseJSON jsonOpts
+instance ToJSON Card where
+    toJSON = genericToJSON jsonOpts
 
 -------------------------------------------------------------------------------
