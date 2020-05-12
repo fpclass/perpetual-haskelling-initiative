@@ -67,5 +67,7 @@ EXPANSION DECKS
     - Loops, to repeat Scripts
 - Haskell
     - Curried function Scripts, increase attack/health of Program
+    - Bind card to combine two Programs into a stronger Program
+    - Map (Script) which applies a given Script to all players Programs in play
 - Python
 
