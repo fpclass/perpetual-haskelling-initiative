@@ -83,7 +83,7 @@ makeCard c = do
         prompt s d = do
             putStr s 
             -- If default value is given then show it in brackets
-            T.putStrLn $ maybe "" (\x -> T.append " (" $ T.append x "):") d
+            T.putStrLn $ maybe "" (\x -> " (" <> x <> "):") d
             putStr "> "
             input <- T.getLine
 
@@ -98,7 +98,7 @@ makeCard c = do
         promptMult :: (Show a) => String -> Int -> ([String] -> Maybe [a]) -> Maybe [a] -> IO [a]
         promptMult s minLines parse d = do
             putStr s
-            putStrLn $ maybe "" (\x -> mappend " (" $ mappend x "):") $ show <$> d
+            putStrLn $ maybe "" (\x -> " (" <> x <> "):") $ show <$> d
             putStrLn "Press enter on a blank line to finish (press enter on the first line to use the default value)"
             -- Get multiple lines and remove duplicates
             input <- nub <$> getLines
