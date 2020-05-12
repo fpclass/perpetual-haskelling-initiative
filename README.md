@@ -22,6 +22,7 @@ Decks can be constructed by the user, but every deck consists of two main parts:
 
 Cards from a BASE DECK are focussed on the behaviours of programming paradigms
 Cards from an EXPANSION are focussed on the behaviours of specific programming languages
+
 # Card Types
 There are _ many card types
 - Programs (minions)
@@ -33,3 +34,9 @@ Programs and Events are playabe, whereas Errors occur as a result of a failed Ev
 Programs act as standard minions would in hearthstone. They have an 'attack' and 'health' rating, and are present on the board until 'killed' or removed
 Events are single use items which have some effect on the current state of the game. 
 Errors may be either a Program or Event, but work against the player which caused the Error
+
+# Attack/Damage
+Each player starts off with 30 'health points'
+Direct attacks on a player will decrease their 'health points'
+
+Programs have 'damage points' and 'health points'. They too lose 'health points' from direct attacks. However, if they have an 'attack' rating greater than 0, that amount of 'damage' is done back on the player/Program which made the initial 'attack'
