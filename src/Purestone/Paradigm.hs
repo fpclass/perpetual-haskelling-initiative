@@ -24,7 +24,7 @@ data Paradigm
     | Compiled
     | Pure 
     | Impure
-    deriving (Eq, Show, Generic)
+    deriving (Eq, Show, Read, Generic)
 
 instance FromJSON Paradigm
 instance ToJSON Paradigm

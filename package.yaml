@@ -39,4 +39,8 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
-    dependencies: []
+    default-extensions:
+    - OverloadedStrings
+    dependencies:
+    - filepath
+    - perpetual-haskelling-initiative
