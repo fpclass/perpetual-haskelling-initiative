@@ -43,3 +43,12 @@ Programs have 'damage points' and 'health points'. They too lose 'health points'
 
 # Card Limits
 A player can only have 8 Programs on the board at one time. 
+
+
+
+
+# Deck Ideas
+BASE DECKS
+- Sequential
+- OOP
+- Functional
