@@ -10,6 +10,7 @@ module Purestone.Language.Program ( Program, Instr(..) ) where
 -------------------------------------------------------------------------------
 import GHC.Generics
 import Data.Aeson
+import Purestone.JSON
 -------------------------------------------------------------------------------
 
 -- | A program is a list of instructions.
@@ -20,6 +21,8 @@ data Instr
     = NoOp
     deriving (Eq, Show, Generic)
 
-instance FromJSON Instr
-instance ToJSON Instr
+instance FromJSON Instr where
+    parseJSON = genericParseJSON jsonOpts
+instance ToJSON Instr where
+    toJSON = genericToJSON jsonOpts
 -------------------------------------------------------------------------------

@@ -11,7 +11,8 @@ import Data.Char (isLower, isUpper, toLower)
 --   the formatting of the field name
 jsonOpts :: Options
 jsonOpts = defaultOptions {
-    fieldLabelModifier = toFieldName
+    fieldLabelModifier = toFieldName,
+    tagSingleConstructors = True
 }
 
 -- | `toFieldName` takes a string name and strips the first word of the camel case. It is used 
