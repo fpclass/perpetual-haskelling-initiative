@@ -50,16 +50,21 @@ A player can only have 8 Programs on the board at one time.
 # Deck Ideas
 BASE DECKS
 - Sequential
+    - Weakest cards compared to other BASE DECKS
+    - 'Hello World' minion
+    - Basic operator Scripts (e.g. add, mult, sub), which alter the attack/health of Programs
 - OOP
     - Combine Programs into a 'class' (Classes could just be Programs with affects of the Programs that merged to become the class)
     - Could have instance cards which copy a players 'class' on the board 
 - Functional
+    - Recursive Scripts, which apply a specified amount of times, dealing damage to player per recursive call
 
 EXPANSION DECKS
 - Java
     - Can use Sequential and OOP
-    - Curly Bracket Minions
+    - Curly Bracket Minions (left '{' and right '}')
     - Try and Catch, combines to Try Catch
+    - Loops, to repeat Scripts
 - Haskell
 - Python
 
