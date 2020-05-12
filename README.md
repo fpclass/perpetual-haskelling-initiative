@@ -46,8 +46,6 @@ Programs have 'damage points' and 'health points'. They too lose 'health points'
 A player can only have 8 Programs on the board at one time. 
 
 
-
-
 # Deck Ideas
 BASE DECKS
 - Imperative
