@@ -5,7 +5,7 @@
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
 -- | This module contains representations of 
-module Purestone.Language.Program ( Program, Instr(..) ) where 
+module Purestone.Language.Program ( Action, Instr(..) ) where 
 
 -------------------------------------------------------------------------------
 import GHC.Generics
@@ -14,7 +14,7 @@ import Purestone.JSON
 -------------------------------------------------------------------------------
 
 -- | A program is a list of instructions.
-type Program = [Instr]
+type Action = [Instr]
 
 -- | Represents instructions that can be used to program cards with.
 data Instr 
