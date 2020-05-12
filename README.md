@@ -50,7 +50,7 @@ A player can only have 8 Programs on the board at one time.
 
 # Deck Ideas
 BASE DECKS
-- Sequential
+- Imperative
     - Weakest cards compared to other BASE DECKS
     - 'Hello World' minion
     - Basic operator Scripts (e.g. add, mult, sub), which alter the attack/health of Programs
