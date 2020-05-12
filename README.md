@@ -53,6 +53,7 @@ BASE DECKS
     - Weakest cards compared to other BASE DECKS
     - 'Hello World' minion
     - Basic operator Scripts (e.g. add, mult, sub), which alter the attack/health of Programs
+    - Spaghetti Code, weak Programs
 - OOP
     - Combine Programs into a 'class' (Classes could just be Programs with affects of the Programs that merged to become the class)
     - Could have instance cards which copy a players 'class' on the board 
@@ -65,9 +66,13 @@ EXPANSION DECKS
     - Curly Bracket Minions (left '{' and right '}')
     - Try and Catch, combines to Try Catch
     - Loops, to repeat Scripts
+    - Waffles, replace all cards on the field with Spaghetti Code
 - Haskell
     - Curried function Scripts, increase attack/health of Program
     - Bind card to combine two Programs into a stronger Program
     - Map (Script) which applies a given Script to all players Programs in play
+    - Foldr, starting from the right, compresses all of your current cards on the field into a single card with all stats combined
+    - Foldl, same as Foldr but starting from the left
+    - Maybe Minions, attacks the right target 50% of the time. Otherwise, chooses between all available targets
 - Python
 
