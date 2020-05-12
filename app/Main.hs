@@ -13,11 +13,14 @@ import System.IO
 import Data.Char (toUpper)
 import Data.Aeson
 import System.FilePath
+import Control.Monad
 
 -- Temporary Definitions - When Card/Deck are defined in the library this will be
 -- removed
 type Card = String
 type Deck = [Card]
+cardsInDeck :: Int
+cardsInDeck = 10
 
 -- | `loadDeck` is a computation which tries to load a deck from disk.
 loadDeck :: IO (Maybe Deck)
@@ -41,12 +44,14 @@ saveDeck d = do
 
 -- | `makeCard` prompts the user through creating cards. It optionally takes a
 --   card which is will use as default values
-makeCard :: Maybe Card -> Card
+makeCard :: Maybe Card -> IO Card
 makeCard = undefined
 
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
-createNewDeck = undefined
+createNewDeck = forM [1..cardsInDeck] $ \i -> do
+    putStrLn $ "\nCard " ++ show i ++ ":"
+    makeCard Nothing
 
 -- | `editCurrentDeck` is a function which tries to edit the given deck
 editCurrentDeck :: Deck -> IO Deck
