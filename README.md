@@ -3,7 +3,8 @@ Main repository for the CS141 Perpetual Haskelling Initiative
 
 # Rules
 Game consists of two 'players', which are represented in game by 'programming languages'
-At the start of a game, both players start with 4 cards and 30 'health' points.
+At the start of a game, both players start with 3 cards and 30 'health' points.
+A coin is flipped to see which player goes first. The player that goes second gets to start the game with an extra card from their deck and an extra 'point' to spend playing cards in their hand. 
 Turns alternate between the two players. A players turn ends when they end their turn or a time runs out. (time tbd)
 
 On a given players turn, they start by drawing a card from their deck.
