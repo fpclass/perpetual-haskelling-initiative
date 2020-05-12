@@ -26,7 +26,7 @@ import Purestone.Language.Program
 -- Temporary Definitions - When relavant definitions are defined in library this
 -- will be removed
 type Deck = [Card]
-parseProg :: [String] -> Maybe Program
+parseProg :: [String] -> Maybe Action
 parseProg = undefined
 
 cardsInDeck :: Int
@@ -61,7 +61,7 @@ makeCard c = do
     -- (mapM readMaybe) passes a list of strings to a list of Paradigms if possible. Since paradigms is NonEmpty not [] it must
     -- be converted to a list and then from a list again after
     paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" 1 (mapM readMaybe) $ NE.toList . cardParadigms <$> c
-    prog <- promptMult "\nEnter Card Program:" 0 parseProg $ cardProgram <$> c
+    prog <- promptMult "\nEnter Card Program:" 0 parseProg $ cardAction <$> c
 
     -- Will be replaced with instance of card when possible
     pure $ Card name desc paras prog
