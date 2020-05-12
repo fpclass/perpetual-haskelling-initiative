@@ -14,16 +14,7 @@ import Data.Aeson
 data Paradigm 
     = Functional 
     | Imperative 
-    | Logic 
     | ObjectOriented
-    | Declarative
-    | WeaklyTyped 
-    | StronglyTyped 
-    | DependentlyTyped
-    | Interpreted
-    | Compiled
-    | Pure 
-    | Impure
     deriving (Eq, Show, Read, Generic)
 
 instance FromJSON Paradigm
