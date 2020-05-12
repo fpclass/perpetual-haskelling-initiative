@@ -29,6 +29,8 @@ data Card = Card {
     cardParadigms :: NonEmpty Paradigm,
     -- | The card's program.
     cardAction :: Action
+    -- The card's cost
+    cardCost :: Int
 } deriving (Eq, Show, Generic)
 
 
