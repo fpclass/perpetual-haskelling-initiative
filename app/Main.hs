@@ -55,7 +55,9 @@ createNewDeck = forM [1..cardsInDeck] $ \i -> do
 
 -- | `editCurrentDeck` is a function which tries to edit the given deck
 editCurrentDeck :: Deck -> IO Deck
-editCurrentDeck = undefined
+editCurrentDeck d = forM (zip [1..] d) $ \(i, c) -> do
+    putStrLn $ "\nCard " ++ show i ++ ":"
+    makeCard $ Just c
 
 -- | `play` is a function which tries to play the game with the given deck
 play :: Deck -> IO ()
