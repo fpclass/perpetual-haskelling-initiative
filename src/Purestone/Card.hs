@@ -28,7 +28,7 @@ data Card = Card {
     -- | The list of paradigms for this card.
     cardParadigms :: NonEmpty Paradigm,
     -- | The card's program.
-    cardProgram :: Program
+    cardAction :: Action
 } deriving (Eq, Show, Generic)
 
 
