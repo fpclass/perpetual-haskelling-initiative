@@ -39,6 +39,10 @@ saveDeck d = do
     fn <- getLine
     encodeFile (fn <.> "json") d
 
+-- | `makeCard` prompts the user through creating cards. It optionally takes a
+--   card which is will use as default values
+makeCard :: Maybe Card -> Card
+makeCard = undefined
 
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
