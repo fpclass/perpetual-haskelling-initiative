@@ -40,3 +40,6 @@ Each player starts off with 30 'health points'
 Direct attacks on a player will decrease their 'health points'  
 
 Programs have 'damage points' and 'health points'. They too lose 'health points' from direct attacks. However, if they have an 'attack' rating greater than 0, that amount of 'damage' is done back on the player/Program which made the initial 'attack'  
+
+# Card Limits
+A player can only have 8 Programs on the board at one time. 
