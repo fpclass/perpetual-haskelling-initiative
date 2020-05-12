@@ -25,13 +25,12 @@ Cards from a BASE DECK are focussed on the behaviours of programming paradigms
 Cards from an EXPANSION are focussed on the behaviours of specific programming languages
 
 # Card Types
-There are _ many card types
+There are 3 card types
 - Programs (minions)
 - Events (Spells)
 - Errors (Negative result from a spell)
 
 Programs and Events are playabe, whereas Errors occur as a result of a failed Event. 
-
 Programs act as standard minions would in hearthstone. They have an 'attack' and 'health' rating, and are present on the board until 'killed' or removed
 Events are single use items which have some effect on the current state of the game. 
 Errors may be either a Program or Event, but work against the player which caused the Error
