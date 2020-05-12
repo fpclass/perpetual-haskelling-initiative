@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0d8b06f9259293a9e971931c423dcefa895aa7cb3e1438df466a3874e786678f
+-- hash: 4482b983ce4606cf293d2ce6644cb868bd972fadbaeb4d5992daef29800f33f0
 
 name:           perpetual-haskelling-initiative
 version:        0.1.0.0
@@ -23,6 +23,26 @@ extra-source-files:
 source-repository head
   type: git
   location: https://github.com/fpclass/perpetual-haskelling-initiative
+
+library
+  exposed-modules:
+      Purestone
+      Purestone.Card
+      Purestone.Hand
+      Purestone.JSON
+      Purestone.Language.Program
+      Purestone.Paradigm
+  other-modules:
+      Paths_perpetual_haskelling_initiative
+  hs-source-dirs:
+      src
+  default-extensions: DeriveGeneric
+  ghc-options: -W
+  build-depends:
+      aeson
+    , base
+    , text
+  default-language: Haskell2010
 
 executable phi
   main-is: Main.hs
