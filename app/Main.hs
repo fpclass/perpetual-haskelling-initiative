@@ -18,7 +18,7 @@ import qualified Data.List.NonEmpty as NE
 import Data.List (nub)
 import Text.Read (readMaybe)
 import System.FilePath
-import Control.Monad (forM)
+import Control.Monad (forM, (>=>))
 
 -- Temporary Definitions - When Card/Deck are defined in the library this will be
 -- removed
@@ -175,7 +175,7 @@ menu deck = do
             saveDeck d
             menu $ Just d
         "C" -> createNewDeck >>= menu . Just
-        "E" -> requireDeck deck $ \d -> editCurrentDeck d >>= menu . Just
+        "E" -> requireDeck deck $ editCurrentDeck >=> (menu . Just)
         "P" -> requireDeck deck $ \d -> do
             play d
             menu $ Just d
