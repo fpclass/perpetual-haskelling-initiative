@@ -28,8 +28,8 @@ data Card = Card {
     -- | The list of paradigms for this card.
     cardParadigms :: NonEmpty Paradigm,
     -- | The card's program.
-    cardAction :: Action
-    -- The card's cost
+    cardAction :: Action,
+    -- | The card's cost
     cardCost :: Int
 } deriving (Eq, Show, Generic)
 
