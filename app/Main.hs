@@ -20,27 +20,17 @@ import Text.Read (readMaybe)
 import System.FilePath
 import Control.Monad (forM, (>=>))
 
--- Temporary Definitions - When Card/Deck are defined in the library this will be
--- removed
-type Card = String
+import Purestone.Card
+import Purestone.Language.Program
+
+-- Temporary Definitions - When relavant definitions are defined in library this
+-- will be removed
 type Deck = [Card]
-data Paradigm = NotYetImplemented1
-    deriving (Show, Read)
-data Instr = NotYetImplemented2
-    deriving (Show)
-type Program  = [Instr]
-cardsInDeck :: Int
-cardsInDeck = 10
-cardName :: b -> T.Text
-cardName = const ""
-cardDescription :: b -> T.Text
-cardDescription = const ""
-cardParadigms :: b -> NE.NonEmpty Paradigm
-cardParadigms = const $ NE.fromList []
-cardProgram :: b -> Program
-cardProgram = const []
 parseProg :: [String] -> Maybe Program
 parseProg = undefined
+
+cardsInDeck :: Int
+cardsInDeck = 10
 
 -- | `loadDeck` is a computation which tries to load a deck from disk.
 loadDeck :: IO (Maybe Deck)
@@ -74,7 +64,7 @@ makeCard c = do
     prog <- promptMult "\nEnter Card Program:" 0 parseProg $ cardProgram <$> c
 
     -- Will be replaced with instance of card when possible
-    pure ""
+    pure $ Card name desc paras prog
 
     where
         -- | `prompt` takes a prompt and optionally a default value and gets valid (non-empty) text

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4482b983ce4606cf293d2ce6644cb868bd972fadbaeb4d5992daef29800f33f0
+-- hash: f6e63e20bb3f08556ea7abf36962533e8bdd21161650f623c952ab847a539a7f
 
 name:           perpetual-haskelling-initiative
 version:        0.1.0.0
@@ -56,5 +56,6 @@ executable phi
       aeson
     , base
     , filepath
+    , perpetual-haskelling-initiative
     , text
   default-language: Haskell2010

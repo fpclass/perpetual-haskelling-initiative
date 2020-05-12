@@ -43,3 +43,4 @@ executables:
     - OverloadedStrings
     dependencies:
     - filepath
+    - perpetual-haskelling-initiative
