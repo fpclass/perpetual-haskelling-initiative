@@ -10,6 +10,7 @@ Turns alternate between the two players. A players turn ends when they end their
 On a given players turn, they start by drawing a card from their deck.  
 They can then proceed to play cards from their hand and 'attack' the opponent.  
 Each card will have a 'point cost'. As the number of rounds increases the number of 'points' a player can spend by playing cards increases to a maximum of 10 'points'  
+Minions can only attack a turn after they have been placed unless specified
 
 Once a players 'health' depleats to 0, the other player wins the game.  
 
@@ -75,4 +76,6 @@ EXPANSION DECKS
     - Foldl, same as Foldr but starting from the left
     - Maybe Minions, attacks the right target 50% of the time. Otherwise, chooses between all available targets
 - Python
+    - Whitespace minion, weak minion 
+    - Certain python specific minions could be able to attack as soon as they are played (much like charge in Hearthstone)
 
