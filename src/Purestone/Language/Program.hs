@@ -18,7 +18,8 @@ type Action = [Instr]
 
 -- | Represents instructions that can be used to program cards with.
 data Instr 
-    = NoOp
+    = Attack Int 
+    | Heal Int
     deriving (Eq, Show, Generic)
 
 instance FromJSON Instr where
