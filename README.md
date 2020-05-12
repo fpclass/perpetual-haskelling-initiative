@@ -66,5 +66,6 @@ EXPANSION DECKS
     - Try and Catch, combines to Try Catch
     - Loops, to repeat Scripts
 - Haskell
+    - Curried function Scripts, increase attack/health of Program
 - Python
 
