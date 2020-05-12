@@ -30,6 +30,9 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
+    default-extensions:
+    - OverloadedStrings
     dependencies:
     - aeson
     - filepath
+    - text
