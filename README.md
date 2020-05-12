@@ -7,7 +7,8 @@ At the start of a game, both players start with 4 cards and 30 'health' points.
 Turns alternate between the two players. A players turn ends when they end their turn or a time runs out. (time tbd)
 
 On a given players turn, they start by drawing a card from their deck.
-They can then proceed to play cards from their hand and 'attack' the opponent
+They can then proceed to play cards from their hand and 'attack' the opponent.
+Each card will have a 'point cost'. As the number of rounds increases the number of 'points' a player can spend by playing cards increases to a maximum of 10 'points'
 
 Once a players 'health' depleats to 0, the other player wins the game.
 
