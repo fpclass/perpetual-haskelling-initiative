@@ -13,3 +13,11 @@ Once a players 'health' depleats to 0, the other player wins the game.
 
 If their deck runs out of cards, instead of drawing a card at the start of a turn they take damage.
  -- This damage should increase as the number of turns with an empty deck increases (exact numbders tbd)
+
+# Decks
+Decks can be constructed by the user, but every deck consists of two main parts: 
+- Cards from a BASE DECK
+- Cards from an EXPANSION
+
+Cards from a BASE DECK are focussed on the behaviours of programming paradigms
+Cards from an EXPANSION are focussed on the behaviours of specific programming languages
