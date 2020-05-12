@@ -52,3 +52,9 @@ BASE DECKS
 - Sequential
 - OOP
 - Functional
+
+EXPANSION DECKS
+- Java
+- Haskell
+- Python
+
