@@ -51,10 +51,15 @@ A player can only have 8 Programs on the board at one time.
 BASE DECKS
 - Sequential
 - OOP
+    - Combine Programs into a 'class' (Classes could just be Programs with affects of the Programs that merged to become the class)
+    - Could have instance cards which copy a players 'class' on the board 
 - Functional
 
 EXPANSION DECKS
 - Java
+    - Can use Sequential and OOP
+    - Curly Bracket Minions
+    - Try and Catch, combines to Try Catch
 - Haskell
 - Python
 
