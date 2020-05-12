@@ -42,6 +42,4 @@ executables:
     default-extensions:
     - OverloadedStrings
     dependencies:
-    - aeson
     - filepath
-    - text
