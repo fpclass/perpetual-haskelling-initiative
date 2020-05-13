@@ -41,9 +41,9 @@ data Card = CardProgram {
         -- | The list of paradigms for this card.
         cardParadigms :: NonEmpty Paradigm,
         -- | The card's program.
-        cardAction :: Action
+        cardAction :: Action,
         -- | The card's cost
-        cardCost :: Int,
+        cardCost :: Int
     } | CardError {
         cardName :: Text,
         -- | The card's flavour text.
