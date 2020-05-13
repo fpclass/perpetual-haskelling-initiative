@@ -53,8 +53,6 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
-    default-extensions:
-    - DataKinds
     dependencies:
     - servant-server
     - perpetual-haskelling-initiative
