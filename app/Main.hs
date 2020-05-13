@@ -10,7 +10,7 @@
 module Main ( main ) where 
 
 import System.IO
-import Data.Char (toUpper)
+import Data.Char (toUpper, isDigit)
 import Data.Aeson
 import qualified Data.Text as T
 import qualified Data.Text.IO as T (putStrLn, getLine)
@@ -88,14 +88,14 @@ makeCardProgram c = do
 
         
         promptInt :: String -> Maybe Int -> IO Int
-        promptInt s i = do
+        promptInt s d = do
             putStr s
-            x <- getLine
-            let val = (read x :: Int)
-            if val < 0 then
-                promptInt s i
-            else
-                pure val
+            xs <- getLine
+            if all isDigit xs && not (null xs)
+                then pure (read xs)
+                else do 
+                    putStrLn "Not a valid number, retry."
+                    promptInt s d
 
         -- | `promptMult` takes a prompt, a minimum length, a parsing function and optionally a default
         --   value and gets a valid list of the given type
