@@ -138,9 +138,9 @@ makeCard c = do
         getCardType d = do
             putStr "\nEnter Card Type:"
             let defaultVal = case d of
-                        Just (CardProgram _ _ _ _ _ _ _) -> Just 'P'
-                        Just (CardScript  _ _ _ _ _)     -> Just 'S'
-                        Just (CardError   _ _ _ _)       -> Just 'E'
+                        Just CardProgram{..} -> Just 'P'
+                        Just CardScript{..}  -> Just 'S'
+                        Just CardError{..}   -> Just 'E'
                         _                                -> Nothing
             putStrLn $ maybe "" (\x -> " (" <> [x] <> "):") defaultVal
             putStr "P: Program\nS: Script\nE: Error\n> "
