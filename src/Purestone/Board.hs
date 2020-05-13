@@ -18,9 +18,9 @@ import GHC.Generics
 data Board
   = Board {
     -- | The first player in a match
-    player1 :: Player,
+    boardPlayer1 :: Player,
     -- | The second player in a match
-    player2 :: Player
+    boardPlayer2 :: Player
   } deriving (Eq, Show, Generic)
 
 
