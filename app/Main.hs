@@ -86,15 +86,15 @@ makeCardProgram c = do
             else
                 pure input
 
-        
+        -- | `promptInt` takes a prompt and an optional default value, and gets a valid positive int input
         promptInt :: String -> Maybe Int -> IO Int
         promptInt s d = do
             putStr s
             xs <- getLine
             if all isDigit xs && not (null xs)
-                then pure (read xs)
+                then pure $ abs (read xs)
                 else do 
-                    putStrLn "Not a valid number, retry."
+                    putStrLn "Not a valid integer input, retry."
                     promptInt s d
 
         -- | `promptMult` takes a prompt, a minimum length, a parsing function and optionally a default
