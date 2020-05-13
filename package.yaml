@@ -22,6 +22,7 @@ dependencies:
 - base 
 - text
 - aeson
+- servant-server
 
 library:
   source-dirs: src
@@ -29,6 +30,8 @@ library:
       - -W
   default-extensions:
   - DeriveGeneric
+  - DataKinds
+  - TypeOperators
 
 executables:
   phi:
@@ -54,5 +57,5 @@ executables:
     - -with-rtsopts=-N
     - -Wall
     dependencies:
-    - servant-server
+    - warp
     - perpetual-haskelling-initiative
