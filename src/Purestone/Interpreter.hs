@@ -11,5 +11,7 @@ module Purestone.Interpreter
 
 import Purestone.Card
 
-
 -------------------------------------------------------------------------------
+
+interpreter :: [String] -> Maybe Program
+interpreter = undefined
