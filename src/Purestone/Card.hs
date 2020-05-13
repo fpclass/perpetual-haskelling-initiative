@@ -20,18 +20,37 @@ import Purestone.JSON
 -------------------------------------------------------------------------------
 
 -- | Represents cards in the game.
-data Card = Card {
-    -- | The name of the card.
-    cardName :: Text,
-    -- | The card's flavour text.
-    cardDescription :: Text,
-    -- | The list of paradigms for this card.
-    cardParadigms :: NonEmpty Paradigm,
-    -- | The card's program.
-    cardAction :: Action,
-    -- | The card's cost
-    cardCost :: Int
-} deriving (Eq, Show, Generic)
+data Card = CardProgram {
+        cardName :: Text,
+        -- | The card's flavour text.
+        cardDescription :: Text,
+        -- | The list of paradigms for this card.
+        cardParadigms :: NonEmpty Paradigm,
+        -- | The card's program.
+        cardAction :: Action,
+        -- | The card's cost
+        cardCost :: Int, 
+        -- | The card's health
+        cardHealth :: Int,
+        -- | The cards attack
+        cardAttack :: Int
+    } | CardScript {
+        cardName :: Text,
+        -- | The card's flavour text.
+        cardDescription :: Text,
+        -- | The list of paradigms for this card.
+        cardParadigms :: NonEmpty Paradigm,
+        -- | The card's program.
+        cardAction :: Action
+    } | CardError {
+        cardName :: Text,
+        -- | The card's flavour text.
+        cardDescription :: Text,
+        -- | The list of paradigms for this card.
+        cardParadigms :: NonEmpty Paradigm,
+        -- | The card's program.
+        cardAction :: Action
+    } deriving (Eq, Show, Generic)
 
 
 -- Define FromJSON and ToJSON instances for Card. genericParseJSON jsonOpts automatically 
