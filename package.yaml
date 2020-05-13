@@ -41,6 +41,7 @@ executables:
     - -Wall
     default-extensions:
     - OverloadedStrings
+    - RecordWildCards
     dependencies:
     - filepath
     - perpetual-haskelling-initiative
