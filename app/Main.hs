@@ -61,10 +61,11 @@ makeCard c = do
     -- (mapM readMaybe) passes a list of strings to a list of Paradigms if possible. Since paradigms is NonEmpty not [] it must
     -- be converted to a list and then from a list again after
     paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" 1 (mapM readMaybe) $ NE.toList . cardParadigms <$> c
-    prog <- promptMult "\nEnter Card Program:" 0 parseProg $ cardAction <$> c
+    act <- promptMult "\nEnter Card Program:" 0 parseProg $ cardAction <$> c
+    cost <- prompt "\nEnter Card Cost" $ cardCost <$> c
 
     -- Will be replaced with instance of card when possible
-    pure $ Card name desc paras prog
+    pure $ Card name desc paras act cost
 
     where
         -- | `prompt` takes a prompt and optionally a default value and gets valid (non-empty) text
@@ -82,6 +83,7 @@ makeCard c = do
                 maybe (putStrLn "Input Cannot Be Blank" >> prompt s d) pure d
             else
                 pure input
+
 
         -- | `promptMult` takes a prompt, a minimum length, a parsing function and optionally a default
         --   value and gets a valid list of the given type
