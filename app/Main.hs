@@ -90,6 +90,8 @@ makeCardProgram c = do
         promptInt :: String -> Maybe Int -> IO Int
         promptInt s d = do
             putStr s
+            putStrLn $ maybe "" (\x -> " (" <> (show x) <> "):") d
+            putStr "> "
             xs <- getLine
             if all isDigit xs && not (null xs)
                 then pure $ abs (read xs)
