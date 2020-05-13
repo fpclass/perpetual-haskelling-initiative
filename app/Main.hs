@@ -54,19 +54,27 @@ saveDeck d = do
 
 -- | `makeCard` prompts the user through creating cards. It optionally takes a
 --   card which is will use as default values
-makeCardProgram :: Maybe Card -> IO Card
-makeCardProgram c = do
+makeCard :: Maybe Card -> IO Card
+makeCard c = do
     name <- prompt "\nEnter Card Name" $ cardName <$> c
     desc <- prompt "\nEnter Card Description" $ cardDescription <$> c
     -- (mapM readMaybe) passes a list of strings to a list of Paradigms if possible. Since paradigms is NonEmpty not [] it must
     -- be converted to a list and then from a list again after
     paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" 1 (mapM readMaybe) $ NE.toList . cardParadigms <$> c
     act <- promptMult "\nEnter Card Action:" 0 parseProg $ cardAction <$> c
-    cost <- promptInt "\nEnter Card Cost" $ cardCost <$> c
-    att <-  promptInt "\nEnter Card Attack" $ cardAttack <$> c
-    hlth <- promptInt "\nEnter Card Health" $ cardHealth <$> c
-    -- Will be replaced with instance of card when possible
-    pure $ CardProgram name desc paras act cost hlth att
+
+    cardType <- getCardType c
+    
+    case cardType of
+        "P" -> do
+            cost <- promptInt "\nEnter Card Cost" $ cardCost <$> c
+            att <-  promptInt "\nEnter Card Attack" $ cardAttack <$> c
+            hlth <- promptInt "\nEnter Card Health" $ cardHealth <$> c
+            pure $ CardProgram name desc paras act cost hlth att
+        "S" -> do
+            cost <- promptInt "\nEnter Card Cost" $ cardCost <$> c
+            pure $ CardScript name desc paras act cost
+        "E" -> pure $ CardError name desc paras act
 
     where
         -- | `prompt` takes a prompt and optionally a default value and gets valid (non-empty) text
@@ -129,17 +137,20 @@ makeCardProgram c = do
                 xs <- getLines
                 return (x:xs)
 
+        getCardType :: Card -> Char
+        getCardType = undefined
+
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
 createNewDeck = forM [1..cardsInDeck] $ \i -> do
     putStrLn $ "\nCard " ++ show i ++ ":"
-    makeCardProgram Nothing
+    makeCard Nothing
 
 -- | `editCurrentDeck` is a function which tries to edit the given deck
 editCurrentDeck :: Deck -> IO Deck
 editCurrentDeck d = forM (zip [1..] d) $ \(i, c) -> do
     putStrLn $ "\nCard " ++ show i ++ ":"
-    makeCardProgram $ Just c
+    makeCard $ Just c
 
 -- | `play` is a function which tries to play the game with the given deck
 play :: Deck -> IO ()
