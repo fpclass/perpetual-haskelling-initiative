@@ -10,7 +10,7 @@
 module Main ( main ) where 
 
 import System.IO
-import Data.Char (toUpper)
+import Data.Char (toUpper, isDigit)
 import Data.Aeson
 import qualified Data.Text as T
 import qualified Data.Text.IO as T (putStrLn, getLine)
@@ -26,8 +26,8 @@ import Purestone.Language.Program
 -- Temporary Definitions - When relavant definitions are defined in library this
 -- will be removed
 type Deck = [Card]
-parseProg :: [String] -> Maybe Program
-parseProg = undefined
+parseProg :: [String] -> Maybe Action
+parseProg _ = Just [Attack 10]
 
 cardsInDeck :: Int
 cardsInDeck = 10
@@ -60,11 +60,21 @@ makeCard c = do
     desc <- prompt "\nEnter Card Description" $ cardDescription <$> c
     -- (mapM readMaybe) passes a list of strings to a list of Paradigms if possible. Since paradigms is NonEmpty not [] it must
     -- be converted to a list and then from a list again after
-    paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" 1 (mapM readMaybe) $ NE.toList . cardParadigms <$> c
-    prog <- promptMult "\nEnter Card Program:" 0 parseProg $ cardProgram <$> c
+    paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" (mapM readMaybe) $ NE.toList . cardParadigms <$> c
+    act <- promptMult "\nEnter Card Action:" parseProg $ cardAction <$> c
 
-    -- Will be replaced with instance of card when possible
-    pure $ Card name desc paras prog
+    cardType <- getCardType c
+    
+    case cardType of
+        'P' -> do
+            cost <- promptInt "\nEnter Card Cost" $ cardCost <$> c
+            att <-  promptInt "\nEnter Card Attack" $ cardAttack <$> c
+            hlth <- promptInt "\nEnter Card Health" $ cardHealth <$> c
+            pure $ CardProgram name desc paras act cost hlth att
+        'S' -> do
+            cost <- promptInt "\nEnter Card Cost" $ cardCost <$> c
+            pure $ CardScript name desc paras act cost
+        'E' -> pure $ CardError name desc paras act
 
     where
         -- | `prompt` takes a prompt and optionally a default value and gets valid (non-empty) text
@@ -83,10 +93,23 @@ makeCard c = do
             else
                 pure input
 
+        -- | `promptInt` takes a prompt and an optional default value, and gets a valid positive int input
+        promptInt :: String -> Maybe Int -> IO Int
+        promptInt s d = do
+            putStr s
+            putStrLn $ maybe "" (\x -> " (" <> (show x) <> "):") d
+            putStr "> "
+            xs <- getLine
+            if all isDigit xs && not (null xs)
+                then 
+                    pure $ abs (read xs)
+                else
+                    maybe (putStrLn "Input Cannot Be Invalid" >> promptInt s d) pure d
+
         -- | `promptMult` takes a prompt, a minimum length, a parsing function and optionally a default
         --   value and gets a valid list of the given type
-        promptMult :: (Show a) => String -> Int -> ([String] -> Maybe [a]) -> Maybe [a] -> IO [a]
-        promptMult s minLines parse d = do
+        promptMult :: (Show a) => String -> ([String] -> Maybe [a]) -> Maybe [a] -> IO [a]
+        promptMult s parse d = do
             putStr s
             putStrLn $ maybe "" (\x -> " (" <> x <> "):") $ show <$> d
             putStrLn "Press enter on a blank line to finish (press enter on the first line to use the default value)"
@@ -95,12 +118,9 @@ makeCard c = do
             let parsedInput = parse input
 
             case parsedInput of
-                Nothing -> putStrLn "Invalid Input" >> promptMult s minLines parse d
+                Nothing -> putStrLn "Invalid Input" >> promptMult s parse d
                 Just i
-                    | null i -> maybe (putStrLn "Input Cannot Be Blank" >> promptMult s minLines parse d) pure d
-                    | length i < minLines -> do
-                            putStrLn $ "You must enter at least " ++ show minLines ++ " lines." 
-                            promptMult s minLines parse d
+                    | null i -> maybe (putStrLn "Input Cannot Be Blank" >> promptMult s parse d) pure d
                     | otherwise -> pure i 
         
         -- | `getLines` gets repeated user input until they enter a blank line
@@ -113,6 +133,25 @@ makeCard c = do
             else do
                 xs <- getLines
                 return (x:xs)
+
+        getCardType :: Maybe Card -> IO Char
+        getCardType d = do
+            putStr "\nEnter Card Type:"
+            let defaultVal = case d of
+                        Just CardProgram{..} -> Just 'P'
+                        Just CardScript{..}  -> Just 'S'
+                        Just CardError{..}   -> Just 'E'
+                        _                                -> Nothing
+            putStrLn $ maybe "" (\x -> " (" <> [x] <> "):") defaultVal
+            putStr "P: Program\nS: Script\nE: Error\n> "
+            
+            input <- getLine
+            case map toUpper input of
+                "P" -> pure 'P'
+                "S" -> pure 'S'
+                "E" -> pure 'E'
+                ""  -> maybe (putStrLn "Input Cannot Be Blank" >> getCardType d) pure defaultVal
+                _   -> putStrLn "Invalid Input - Enter P, S or E" >> getCardType d 
 
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
