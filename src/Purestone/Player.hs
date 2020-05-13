@@ -11,9 +11,21 @@ module Purestone.Player ( Player ) where
 
 import Purestone.Hand
 import Purestone.Card
+import GHC.Generics
 
 -------------------------------------------------------------------------------
 
-type Player = Hand
+type Deck = [Card]
+
+data Player
+  = Player {
+    hand :: Hand,
+    deck :: Deck,
+    currentPoints :: Int,
+    maximumPoints :: Int,
+    boardSpace :: [Card],
+    deadPrograms :: [Card]
+  } deriving (Eq, Show, Generic)
+
 
 -------------------------------------------------------------------------------
