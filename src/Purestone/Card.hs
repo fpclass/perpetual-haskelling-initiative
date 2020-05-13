@@ -42,6 +42,8 @@ data Card = CardProgram {
         cardParadigms :: NonEmpty Paradigm,
         -- | The card's program.
         cardAction :: Action
+        -- | The card's cost
+        cardCost :: Int,
     } | CardError {
         cardName :: Text,
         -- | The card's flavour text.
