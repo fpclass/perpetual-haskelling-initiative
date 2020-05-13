@@ -63,9 +63,8 @@ makeCardProgram c = do
     paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" 1 (mapM readMaybe) $ NE.toList . cardParadigms <$> c
     act <- promptMult "\nEnter Card Action:" 0 parseProg $ cardAction <$> c
     cost <- promptInt "\nEnter Card Cost" $ cardCost <$> c
-    hlth <- promptInt "\nEnter Card Health" $ cardHealth <$> c
     att <-  promptInt "\nEnter Card Attack" $ cardAttack <$> c
-
+    hlth <- promptInt "\nEnter Card Health" $ cardHealth <$> c
     -- Will be replaced with instance of card when possible
     pure $ CardProgram name desc paras act cost hlth att
 
@@ -94,10 +93,10 @@ makeCardProgram c = do
             putStr "> "
             xs <- getLine
             if all isDigit xs && not (null xs)
-                then pure $ abs (read xs)
-                else do 
-                    putStrLn "Not a valid integer input, retry."
-                    promptInt s d
+                then 
+                    pure $ abs (read xs)
+                else
+                    maybe (putStrLn "Input Cannot Be Invalid" >> promptInt s d) pure d
 
         -- | `promptMult` takes a prompt, a minimum length, a parsing function and optionally a default
         --   value and gets a valid list of the given type
