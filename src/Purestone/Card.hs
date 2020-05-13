@@ -20,7 +20,8 @@ import Purestone.JSON
 -------------------------------------------------------------------------------
 
 -- | Represents cards in the game.
-data Card = CardProgram {
+data Card 
+    = CardProgram {
         cardName :: Text,
         -- | The card's flavour text.
         cardDescription :: Text,
@@ -34,7 +35,8 @@ data Card = CardProgram {
         cardHealth :: Int,
         -- | The cards attack
         cardAttack :: Int
-    } | CardScript {
+    }
+    | CardScript {
         cardName :: Text,
         -- | The card's flavour text.
         cardDescription :: Text,
@@ -44,7 +46,8 @@ data Card = CardProgram {
         cardAction :: Action,
         -- | The card's cost
         cardCost :: Int
-    } | CardError {
+    }
+    | CardError {
         cardName :: Text,
         -- | The card's flavour text.
         cardDescription :: Text,
