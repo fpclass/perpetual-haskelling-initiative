@@ -6,4 +6,4 @@ import Data.IORef
 import Purestone.Server.App
 
 main :: IO ()
-main = run 3000 <$> app =<< newIORef (Nothing, 0, False, False)
+main = app <$> newIORef (Nothing, False, False) <*> newIORef [] >>= run 3000

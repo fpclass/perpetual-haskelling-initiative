@@ -24,12 +24,12 @@ stateResponse s b c s' =
 --   player already has the latest changes then HTTP304 is returned 
 getState :: IORef GameState -> Int -> Int -> Handler Board
 getState s _ p = do
-    (b, _, u1, u2) <- liftIO $ readIORef s
+    (b, u1, u2) <- liftIO $ readIORef s
 
     -- If there is no board then return 404, otherwise determine response
     flip (maybe $ throwError err404) b $ \b' -> 
         case p of
-            1 -> stateResponse s b' u1 (b, 2, False, u2)
-            2 -> stateResponse s b' u2 (b, 2, u1, False)
+            1 -> stateResponse s b' u1 (b, False, u2)
+            2 -> stateResponse s b' u2 (b, u1, False)
             _ -> throwError err400
 

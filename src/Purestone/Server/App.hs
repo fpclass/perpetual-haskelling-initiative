@@ -21,8 +21,8 @@ type PurestoneAPI =  "getState"  :> Capture "gameID" Int :> Capture "player" Int
                 :<|> "connect"   :> ReqBody '[JSON] Deck :> Post '[JSON] ConnectResponse
                 :<|> "gameReady" :> Capture "gameID" Int :> Get '[JSON] Bool
 
-server :: IORef GameState -> Server PurestoneAPI
-server s = getState s :<|> makeMove s :<|> connect s :<|> gameReady s
+server :: IORef GameState -> IORef [Deck] -> Server PurestoneAPI
+server s ds = getState s :<|> makeMove s :<|> connect s ds :<|> gameReady ds
 
-app :: IORef GameState -> Application
-app s = serve (Proxy :: Proxy PurestoneAPI) $ server s
+app :: IORef GameState -> IORef [Deck] -> Application
+app s ds = serve (Proxy :: Proxy PurestoneAPI) $ server s ds

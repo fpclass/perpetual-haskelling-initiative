@@ -33,17 +33,17 @@ getMoveResponse b move hand p =
 --   the player want to play and attempts to play those cards
 makeMove :: IORef GameState -> Int -> Int -> [Card] -> Handler Board
 makeMove s _ p cs = do
-    (b, _, _, _) <- liftIO $ readIORef s
+    (b, _, _) <- liftIO $ readIORef s
 
     -- If there is no board then return 404, otherwise determine response
     flip (maybe $ throwError err404) b $ \b'@Board{..} -> 
         case p of
             1 -> do
                 response <- getMoveResponse b' cs (playerHand boardPlayer1) 1
-                liftIO $ atomicWriteIORef s (Just response, 2, False, True)
+                liftIO $ atomicWriteIORef s (Just response, False, True)
                 pure response
             2 -> do
                 response <- getMoveResponse b' cs (playerHand boardPlayer2) 2
-                liftIO $ atomicWriteIORef s (Just response, 2, True, False)
+                liftIO $ atomicWriteIORef s (Just response, True, False)
                 pure response
             _ -> throwError err400
