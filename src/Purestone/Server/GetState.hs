@@ -31,5 +31,5 @@ getState s _ p = do
         case p of
             1 -> stateResponse s b' u1 $ \(b', _, u2) -> ((b', False, u2), ())
             2 -> stateResponse s b' u2 $ \(b', u1, _) -> ((b', u1, False), ())
-            _ -> throwError err404
+            _ -> throwError err400
 
