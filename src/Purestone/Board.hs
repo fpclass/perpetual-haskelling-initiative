@@ -5,7 +5,7 @@
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
 
-module Purestone.Board ( Board ) where
+module Purestone.Board ( Board(..) ) where
 
 -------------------------------------------------------------------------------
 

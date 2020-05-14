@@ -5,7 +5,7 @@
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
 
-module Purestone.Player ( Player ) where
+module Purestone.Player ( Player(..) ) where
 
 -------------------------------------------------------------------------------
 
