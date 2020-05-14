@@ -2,6 +2,7 @@ module Purestone.Server.Util ( connect, gameReady ) where
 
 import Servant
 import Data.IORef
+import Data.Time.Clock
 import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Deck
@@ -24,13 +25,14 @@ connect s ds d = do
             pure $ Connected 1 1
         1 -> do
             liftIO $ atomicWriteIORef ds (decks++[d])
+            time <- liftIO getCurrentTime
             let (board, start) = setupGame decks
-            liftIO $ atomicWriteIORef s (Just $ board, True, True, start)
+            liftIO $ atomicWriteIORef s (Just board, time, start)
             pure $ Connected 1 2
-        _ -> throwError $ err500
+        _ -> throwError err500
 
 -- | `gameReady` takes a game ID and will return whether the 
 --   game is ready to play. This will be used by clients to 
 --   tell when a 2nd player has joined
 gameReady :: IORef [Deck] -> Int -> Handler Bool
-gameReady ds _ = (==2) <$> length <$> liftIO (readIORef ds)
+gameReady ds _ = (==2) . length <$> liftIO (readIORef ds)

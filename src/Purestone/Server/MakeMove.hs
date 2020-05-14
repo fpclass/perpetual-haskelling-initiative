@@ -2,6 +2,7 @@ module Purestone.Server.MakeMove (makeMove) where
 
 import Servant
 import Data.IORef
+import Data.Time.Clock
 import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Board
@@ -33,8 +34,9 @@ getMoveResponse b move hand p =
 --   the player want to play and attempts to play those cards
 makeMove :: IORef GameState -> Int -> Int -> [Card] -> Handler Board
 makeMove s _ p cs = do
-    (b, _, _, t) <- liftIO $ readIORef s
-    
+    (b, _, t) <- liftIO $ readIORef s
+    time <- liftIO getCurrentTime
+
     if t /= p then
         throwError err400
     else
@@ -43,10 +45,10 @@ makeMove s _ p cs = do
             case p of
                 1 -> do
                     response <- getMoveResponse b' cs (playerHand boardPlayer1) 1
-                    liftIO $ atomicWriteIORef s (Just response, False, True, 2)
+                    liftIO $ atomicWriteIORef s (Just response, time, 2)
                     pure response
                 2 -> do
                     response <- getMoveResponse b' cs (playerHand boardPlayer2) 2
-                    liftIO $ atomicWriteIORef s (Just response, True, False, 1)
+                    liftIO $ atomicWriteIORef s (Just response, time, 1)
                     pure response
                 _ -> throwError err400

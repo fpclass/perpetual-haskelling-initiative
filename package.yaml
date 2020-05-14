@@ -23,6 +23,7 @@ dependencies:
 - text
 - aeson
 - servant-server
+- time
 
 library:
   source-dirs: src
