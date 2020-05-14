@@ -25,9 +25,9 @@ stateResponse s b c f =
 getState :: IORef GameState -> Int -> Int -> Handler Board
 getState s _ p = do
     (b, u1, u2) <- liftIO $ readIORef s
-    
+
     -- If there is no board then return 404, otherwise determine response
-    flip (maybe (throwError err404)) b $ \b' -> 
+    flip (maybe $ throwError err404) b $ \b' -> 
         case p of
             1 -> stateResponse s b' u1 $ \(b', _, u2) -> ((b', False, u2), ())
             2 -> stateResponse s b' u2 $ \(b', u1, _) -> ((b', u1, False), ())
