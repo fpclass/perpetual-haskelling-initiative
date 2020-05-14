@@ -9,8 +9,9 @@ import Purestone.Board
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
 
--- TEMPORARY DEFINITION: setupGame takes the decks and creates the starting board
-setupGame :: [Deck] -> Board
+-- TEMPORARY DEFINITION: setupGame takes the decks and creates the starting board and selects
+-- starting player
+setupGame :: [Deck] -> (Board, Int)
 setupGame = undefined
 
 -- | `connect` will attempt to connect a new user to a game
@@ -23,7 +24,8 @@ connect s ds d = do
             pure $ Connected 1 1
         1 -> do
             liftIO $ atomicWriteIORef ds (decks++[d])
-            liftIO $ atomicWriteIORef s (Just $ setupGame decks, True, True)
+            let (board, start) = setupGame decks
+            liftIO $ atomicWriteIORef s (Just $ board, True, True, start)
             pure $ Connected 1 2
         _ -> throwError $ err500
 
