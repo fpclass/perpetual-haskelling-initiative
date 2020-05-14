@@ -5,6 +5,7 @@ import Data.IORef
 import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Deck
+import Purestone.Board
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
 
@@ -22,7 +23,7 @@ connect s ds d = do
             pure $ Connected 1 1
         1 -> do
             liftIO $ atomicWriteIORef ds (decks++[d])
-            liftIO $ atomicWriteIORef s (setupGame ds, True, True)
+            liftIO $ atomicWriteIORef s (Just $ setupGame decks, True, True)
             pure $ Connected 1 2
         _ -> throwError $ err500
 
