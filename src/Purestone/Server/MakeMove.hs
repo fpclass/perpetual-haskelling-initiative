@@ -7,6 +7,7 @@ import Control.Monad.IO.Class (liftIO)
 import Purestone.Board
 import Purestone.Player
 import Purestone.Card
+import Purestone.Hand
 import Purestone.Server.GameState
 
 -- Temporary Definition
@@ -21,7 +22,7 @@ subsetOf xs ys = null $ filter (not . (`elem` ys)) xs
 -- | `getMoveResponse` checks the user has the cards they want to play
 --   and attempts to play those cards. HTTP400 is returned if the cards
 --   were not valid
-getMoveResponse :: Board -> [Card] -> [Card] -> Int -> Handler Board
+getMoveResponse :: Board -> [Card] -> Hand -> Int -> Handler Board
 getMoveResponse b move hand p = 
     if not (null move) && move `subsetOf` hand then
         maybe (throwError err400) pure $ processMove b move p
