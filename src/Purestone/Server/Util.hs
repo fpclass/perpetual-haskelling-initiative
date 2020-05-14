@@ -2,6 +2,7 @@ module Purestone.Server.Util ( connect, gameReady ) where
 
 import Servant
 import Data.IORef
+import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
@@ -14,4 +15,6 @@ connect = undefined
 --   game is ready to play. This will be used by clients to 
 --   tell when a 2nd player has joined
 gameReady :: IORef GameState -> Int -> Handler Bool
-gameReady = undefined
+gameReady s _ = do
+    (_, n, _, _) <- liftIO $ readIORef s
+    pure $ n == 2
