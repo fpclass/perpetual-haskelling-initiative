@@ -6,6 +6,7 @@ import Data.Time.Clock
 import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Board
+import Purestone.Server.Sanitise
 import Purestone.Server.GameState
 
 -- | `getState` attempts to return the current board if there are changes. If the
@@ -17,7 +18,7 @@ getState s _ p d = do
     -- If there is no board then return 404, otherwise determine response
     flip (maybe $ throwError err404) b $ \b' -> 
         case d of 
-            Nothing -> pure b'
+            Nothing -> pure $ sanitiseBoard b' p
             Just date
-                | date < mod -> pure b'
+                | date < mod -> pure $ sanitiseBoard b' p
                 | otherwise  -> throwError err304

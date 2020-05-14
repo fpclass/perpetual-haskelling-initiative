@@ -9,6 +9,7 @@ import Purestone.Board
 import Purestone.Player
 import Purestone.Card
 import Purestone.Hand
+import Purestone.Server.Sanitise
 import Purestone.Server.GameState
 
 -- Temporary Definition
@@ -26,7 +27,7 @@ subsetOf xs ys = null $ filter (not . (`elem` ys)) xs
 getMoveResponse :: Board -> [Card] -> Hand -> Int -> Handler Board
 getMoveResponse b move hand p = 
     if not (null move) && move `subsetOf` hand then
-        maybe (throwError err400) pure $ processMove b move p
+        maybe (throwError err400) (pure . flip sanitiseBoard p) $ processMove b move p
     else
         throwError err400
 
@@ -46,9 +47,9 @@ makeMove s _ p cs = do
                 1 -> do
                     response <- getMoveResponse b' cs (playerHand boardPlayer1) 1
                     liftIO $ atomicWriteIORef s (Just response, time, 2)
-                    pure response
+                    pure $ sanitiseBoard response p
                 2 -> do
                     response <- getMoveResponse b' cs (playerHand boardPlayer2) 2
                     liftIO $ atomicWriteIORef s (Just response, time, 1)
-                    pure response
+                    pure $ sanitiseBoard response p
                 _ -> throwError err400
