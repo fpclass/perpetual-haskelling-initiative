@@ -36,8 +36,8 @@ connect s ds d = do
             let (board, start) = setupGame decks
             liftIO $ atomicWriteIORef s (Just board, time, start)
             pure $ Connected 1 2
-            
-        _ -> throwError err500
+
+        _ -> throwError err409
 
 -- | `gameReady` takes a game ID and will return whether the 
 --   game is ready to play. This will be used by clients to 
