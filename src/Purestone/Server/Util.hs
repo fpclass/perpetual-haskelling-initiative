@@ -13,13 +13,9 @@ import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Deck
 import Purestone.Board
+import Purestone.Game
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
-
--- TEMPORARY DEFINITION: setupGame takes the decks and creates the starting board and selects
--- starting player
-setupGame :: [Deck] -> (Board, Int)
-setupGame = undefined
 
 -- | `connect` will attempt to connect a new user to a game. It takes the IORef
 --   of the game state so it can start games, and the IORef of [Deck] which 

@@ -15,13 +15,9 @@ import Purestone.Board
 import Purestone.Player
 import Purestone.Card
 import Purestone.Hand
+import Purestone.Game
 import Purestone.Server.Sanitise
 import Purestone.Server.GameState
-
--- Temporary Definition: Takes the board, the move and the player number and 
--- attempts to do that move. `Nothing` is returned if it fails
-processMove :: Board -> [Card] -> Int -> Maybe Board
-processMove = undefined
 
 -- | `subsetOf` determines if 1 set is a subset of another (taken from
 --   https://mail.haskell.org/pipermail/beginners/2010-January/003350.html)
