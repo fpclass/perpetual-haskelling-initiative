@@ -17,8 +17,8 @@ import Purestone.Server.GameState
 import Purestone.Server.ConnectResponse
 import Purestone.Server.Util
 
-type PurestoneAPI =  "getState"  :> Capture "gameID" Int :> Capture "player" Int :> QueryParam "Last-Received-Update" UTCTime :> Get '[JSON] Board
-                :<|> "makeMove"  :> Capture "gameID" Int :> Capture "player" Int :> ReqBody '[JSON] [Card] :> Post '[JSON] Board
+type PurestoneAPI =  "state"     :> Capture "gameID" Int :> Capture "player" Int :> QueryParam "update" UTCTime :> Get '[JSON] Board
+                :<|> "state"     :> Capture "gameID" Int :> Capture "player" Int :> ReqBody '[JSON] [Card] :> Patch '[JSON] Board
                 :<|> "connect"   :> ReqBody '[JSON] Deck :> Post '[JSON] ConnectResponse
                 :<|> "gameReady" :> Capture "gameID" Int :> Get '[JSON] Bool
 
