@@ -11,7 +11,6 @@ module Purestone.Interpreter where
 
 import Purestone.Language.Program
 
-import Data.Text (Text)
 import Data.Void
 import Data.Either
 
@@ -21,39 +20,44 @@ import qualified Text.Megaparsec.Char.Lexer as L
 
 
 -------------------------------------------------------------------------------
-type Error = String
+type Err = String
 
 type Parser = Parsec Void String
 
-
-interpreter :: [String] -> Maybe Action
-interpreter [] = Just []
+-- takes a list of strings where each string is a line, and returns a list of instructions or an error
+interpreter :: [String] -> Either Err Action
+interpreter [] = Right []
 interpreter (instr : instrs)= do 
                     x  <- translate instr
                     xs <- interpreter instrs
-                    Just (x:xs)
+                    Right (x:xs)
 
 
 
--- Translates a line of code into an instruction
-translate :: String -> Maybe Instr
+-- Translates a line of code into an instruction or an error
+translate :: String -> Either Err Instr
 translate line  | (isRight p) && (w == "ATTACK")        = getInteger Attack (length w) line
                 | (isRight p) && (w == "HEAL")          = getInteger Heal (length w) line
                 | (isRight p) && (w == "DRAW")          = getInteger Draw (length w) line
-                | (isRight p) && (w == "DELETE")        = Just Delete
-                | (isRight p) && (w == "MUTE")          = Just Mute
-                | (isRight p) && (w == "RESET")         = Just Reset     
-                | (isRight p) && (w == "CHOWN")         = Just Chown
-                | otherwise = Nothing 
+                | (isRight p) && (w == "DELETE")        = Right Delete
+                | (isRight p) && (w == "MUTE")          = Right Mute
+                | (isRight p) && (w == "RESET")         = Right Reset     
+                | (isRight p) && (w == "CHOWN")         = Right Chown
+                | otherwise = Left ("invalid input: " ++ w ++ " in " ++ line) 
                 where   p = parse getWord "" line
                         Right w = p 
 
--- returns an instruction with form (Instr Int)
-getInteger :: (Int -> Instr) -> Int -> String -> Maybe Instr
+
+-- extracts the first word from a string
+getWord :: Parser [Char]
+getWord = (many (satisfy ( /= ' ' ) :: Parser Char ) :: Parser [Char] )
+
+-- returns an instruction with form (Instr Int) or an error
+getInteger :: (Int -> Instr) -> Int -> String -> Either Err Instr
 getInteger instr n line =       if isRight s then 
-                                        Just (instr (fromInteger num)) 
+                                        Right (instr (fromInteger num)) 
                                 else 
-                                        Nothing
+                                        Left ("invalid input in line: " ++ line ++ " was expecting integer" )
                                 where   s = parse (integer <* eof) "" (drop (n+1) line)
                                         Right num = s
 
@@ -65,7 +69,3 @@ lexeme = L.lexeme sc
 
 integer :: Parser Integer
 integer = lexeme L.decimal
-
-getWord :: Parser [Char]
-getWord = (many (satisfy ( /= ' ' ) :: Parser Char ) :: Parser [Char] )
-              
