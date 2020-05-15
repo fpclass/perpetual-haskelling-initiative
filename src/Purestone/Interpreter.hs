@@ -37,14 +37,25 @@ interpreter (instr : instrs)= do
 
 -- Translates a line of code into an instruction
 translate :: String -> Maybe Instr
--- drop 7 w
-translate line  | (isRight p) && (isRight s) && (w == "ATTACK")    = Just (Attack (fromInteger n) )
-                | (isRight p) && (isRight s) && (w == "HEAL")      = Just (Heal (fromInteger n) )
+translate line  | (isRight p) && (w == "ATTACK")        = getInteger Attack (length w) line
+                | (isRight p) && (w == "HEAL")          = getInteger Heal (length w) line
+                | (isRight p) && (w == "DRAW")          = getInteger Draw (length w) line
+                | (isRight p) && (w == "DELETE")        = Just Delete
+                | (isRight p) && (w == "MUTE")          = Just Mute
+                | (isRight p) && (w == "RESET")         = Just Reset     
+                | (isRight p) && (w == "CHOWN")         = Just Chown
                 | otherwise = Nothing 
                 where   p = parse getWord "" line
                         Right w = p 
-                        s = parse (integer <* eof) "" (drop ((length w)+1) line)
-                        Right n = s
+
+-- returns an instruction with form (Instr Int)
+getInteger :: (Int -> Instr) -> Int -> String -> Maybe Instr
+getInteger instr n line =       if isRight s then 
+                                        Just (instr (fromInteger num)) 
+                                else 
+                                        Nothing
+                                where   s = parse (integer <* eof) "" (drop (n+1) line)
+                                        Right num = s
 
 sc :: Parser ()
 sc = L.space space1 (L.skipLineComment "//") (L.skipBlockComment "/*" "*/")
