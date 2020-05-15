@@ -7,6 +7,8 @@
 module Purestone.Game ( setupGame, processMove ) where
 
 import Purestone.Board
+import Purestone.Card
+import Purestone.Deck
 
 -- | `setupGame` takes the 2 players decks (in a list) and creates the initial 
 --   board and determines the starting player
