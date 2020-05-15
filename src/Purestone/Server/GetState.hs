@@ -10,7 +10,10 @@ import Purestone.Server.Sanitise
 import Purestone.Server.GameState
 
 -- | `getState` attempts to return the current board if there are changes. If the
---   player already has the latest changes then HTTP304 is returned 
+--   player already has the latest changes then HTTP304 is returned. It does this
+--   by comparing the time from the `Last-Received-Update` QueryParam to the date
+--   of the last change. If this query parameter is missing then the state is 
+--   always returned
 getState :: IORef GameState -> Int -> Int -> Maybe UTCTime -> Handler Board
 getState s _ p d = do
     (b, mod, _) <- liftIO $ readIORef s

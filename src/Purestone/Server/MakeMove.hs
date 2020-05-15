@@ -24,10 +24,16 @@ subsetOf xs ys = null $ filter (not . (`elem` ys)) xs
 -- | `getMoveResponse` checks the user has the cards they want to play
 --   and attempts to play those cards. HTTP400 is returned if the cards
 --   were not valid
-getMoveResponse :: Board -> [Card] -> Hand -> Int -> Handler Board
-getMoveResponse b move hand p = 
+getMoveResponse :: IORef GameState -> Board -> [Card] -> Hand -> Int -> Handler Board
+getMoveResponse s b move hand p = 
+    -- Check move is not empty and the user has the cards they want to play
     if not (null move) && move `subsetOf` hand then
-        maybe (throwError err400) (pure . flip sanitiseBoard p) $ processMove b move p
+        -- Use `prcessMove` to attempt move. If it fails then return HTTP400
+        flip (maybe $ throwError err400) (processMove b move p) $ \b' -> do
+            -- Update time modified to now, then return sanitised board to user
+            time <- liftIO getCurrentTime
+            liftIO $ atomicWriteIORef s (Just b', time, 3-p)
+            pure $ sanitiseBoard b' p
     else
         throwError err400
 
@@ -36,20 +42,15 @@ getMoveResponse b move hand p =
 makeMove :: IORef GameState -> Int -> Int -> [Card] -> Handler Board
 makeMove s _ p cs = do
     (b, _, t) <- liftIO $ readIORef s
-    time <- liftIO getCurrentTime
 
+    -- Check the right player is attempting to move
     if t /= p then
         throwError err400
     else
-        -- If there is no board then return 404, otherwise determine response
+        -- If there is no board then return 404 as the game hasn't started, otherwise
+        -- determine response using `getMoveResponse`
         flip (maybe $ throwError err404) b $ \b'@Board{..} -> 
             case p of
-                1 -> do
-                    response <- getMoveResponse b' cs (playerHand boardPlayer1) 1
-                    liftIO $ atomicWriteIORef s (Just response, time, 2)
-                    pure $ sanitiseBoard response p
-                2 -> do
-                    response <- getMoveResponse b' cs (playerHand boardPlayer2) 2
-                    liftIO $ atomicWriteIORef s (Just response, time, 1)
-                    pure $ sanitiseBoard response p
+                1 -> getMoveResponse s b' cs (playerHand boardPlayer1) 1
+                2 -> getMoveResponse s b' cs (playerHand boardPlayer2) 2
                 _ -> throwError err400
