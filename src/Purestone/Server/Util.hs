@@ -24,16 +24,19 @@ import Purestone.Server.GameState
 connect :: IORef GameState -> IORef [Deck] -> Deck -> Handler ConnectResponse
 connect s ds d = do
     decks <- liftIO $ readIORef ds
-    case length decks of
-        0 -> do
+    case decks of
+        [] -> do
             liftIO $ atomicWriteIORef ds [d]
             pure $ Connected 1 1
-        1 -> do
-            liftIO $ atomicWriteIORef ds (decks++[d])
+
+        [d1] -> do
+            liftIO $ atomicWriteIORef ds [d1, d]
             time <- liftIO getCurrentTime
+
             let (board, start) = setupGame decks
             liftIO $ atomicWriteIORef s (Just board, time, start)
             pure $ Connected 1 2
+            
         _ -> throwError err500
 
 -- | `gameReady` takes a game ID and will return whether the 
