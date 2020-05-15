@@ -18,7 +18,8 @@ import Purestone.Hand
 import Purestone.Server.Sanitise
 import Purestone.Server.GameState
 
--- Temporary Definition
+-- Temporary Definition: Takes the board, the move and the player number and 
+-- attempts to do that move. `Nothing` is returned if it fails
 processMove :: Board -> [Card] -> Int -> Maybe Board
 processMove = undefined
 
