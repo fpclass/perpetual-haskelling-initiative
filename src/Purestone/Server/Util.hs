@@ -12,7 +12,6 @@ import Data.Time.Clock
 import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Deck
-import Purestone.Board
 import Purestone.Game
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
