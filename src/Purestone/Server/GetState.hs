@@ -20,9 +20,9 @@ import Purestone.Server.GameState
 --   by comparing the time from the `Last-Received-Update` QueryParam to the date
 --   of the last change. If this query parameter is missing then the state is 
 --   always returned
-getState :: IORef GameState -> Int -> Int -> Maybe UTCTime -> Handler Board
-getState s _ p d = do
-    (b, mod, _) <- liftIO $ readIORef s
+getState :: IORef GameStates -> Int -> Int -> Maybe UTCTime -> Handler Board
+getState s g p d = do
+    (b, mod, _) <- lookup g <$> liftIO (readIORef s)
 
     -- If there is no board then return 404, otherwise determine response
     flip (maybe $ throwError err404) b $ \b' -> 
