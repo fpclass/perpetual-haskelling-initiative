@@ -11,11 +11,25 @@ import Purestone.Board
 import Purestone.Card
 import Purestone.Deck
 import Purestone.Player
+import Purestone.Random ( shuffleIO )
+
+import System.Random ( randomRIO )
 
 -- | `setupGame` takes the 2 players decks (in a list) and creates the initial
 --   board and determines the starting player
-setupGame :: [Deck] -> (Board, Int)
-setupGame = undefined
+setupGame :: [Deck] -> IO Board
+setupGame [d1,d2] = do 
+    start <- randomRIO (1,2)
+    shuffledD1 <- shuffleIO d1
+    shuffledD2 <- shuffleIO d2
+    return $ Board (initPlayer shuffledD1) (initPlayer shuffledD2) start
+setupGame _ = error "Exactly 2 Decks are needed to setup game."
+
+-- | `initPlayer` creates a new Player from a Deck following the specs in the `README`. 
+-- The top 3 cards are removed from the deck and placed into the player's hand
+initPlayer :: Deck -> Player
+initPlayer (c1:c2:c3:d) = Player 30 [c1,c2,c3] d 0 10 [] [] 0
+initPlayer _ = error "Player initialised with less than 3 cards."
 
 -- | `processMove` takes the current board, the cards to play and the player
 --   number and attempts to perform the move. `Nothing` is returned if this

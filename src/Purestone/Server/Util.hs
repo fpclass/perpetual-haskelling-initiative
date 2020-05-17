@@ -12,6 +12,7 @@ import Data.Time.Clock
 import Control.Monad.IO.Class (liftIO)
 
 import Purestone.Deck
+import Purestone.Board
 import Purestone.Game
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
@@ -33,8 +34,8 @@ connect s ds d = do
             liftIO $ atomicWriteIORef ds [d1, d]
             time <- liftIO getCurrentTime
 
-            let (board, start) = setupGame decks
-            liftIO $ atomicWriteIORef s (Just board, time, start)
+            board <- liftIO $ setupGame decks
+            liftIO $ atomicWriteIORef s (Just board, time, boardTurn board)
             pure $ Connected 1 2
 
         _ -> throwError err409
