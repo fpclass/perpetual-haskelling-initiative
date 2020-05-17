@@ -47,5 +47,5 @@ startTurn player = resetPoints . increasePoints . draw $ player
 -- | `changeTurn` switches the turn from player 1 to player 2 or player 2 to
 --    player 1 and calls the start turn function for that player
 changeTurn :: Board -> Board
-changeTurn (Board p1 p2 0) = Board p1 (startTurn p2) 1
-changeTurn (Board p1 p2 _) = Board (startTurn p1) p2 0
+changeTurn (Board p1 p2 1) = Board p1 (startTurn p2) 2
+changeTurn (Board p1 p2 _) = Board (startTurn p1) p2 1
