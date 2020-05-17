@@ -7,9 +7,10 @@
 module Purestone.Server.GetState (getState) where
 
 import Servant
-import Data.IORef
 import Data.Time.Clock
+import qualified Data.IntMap as IM (lookup)
 import Control.Monad.IO.Class (liftIO)
+import Control.Concurrent.STM.TVar
 
 import Purestone.Board
 import Purestone.Server.Sanitise
@@ -20,14 +21,14 @@ import Purestone.Server.GameState
 --   by comparing the time from the `Last-Received-Update` QueryParam to the date
 --   of the last change. If this query parameter is missing then the state is 
 --   always returned
-getState :: IORef GameStates -> Int -> Int -> Maybe UTCTime -> Handler Board
+getState :: TVar GameStates -> Int -> Int -> Maybe UTCTime -> Handler Board
 getState s g p d = do
-    (b, mod, _) <- lookup g <$> liftIO (readIORef s)
+    gs <- IM.lookup g <$> liftIO (readTVarIO s)
 
     -- If there is no board then return 404, otherwise determine response
-    flip (maybe $ throwError err404) b $ \b' -> 
+    flip (maybe $ throwError err404) gs $ \(b, mod, _) -> 
         case d of 
-            Nothing -> pure $ sanitiseBoard b' p
+            Nothing -> pure $ sanitiseBoard b p
             Just date
-                | date < mod -> pure $ sanitiseBoard b' p
+                | date < mod -> pure $ sanitiseBoard b p
                 | otherwise  -> throwError err304
