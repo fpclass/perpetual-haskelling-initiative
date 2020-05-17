@@ -7,10 +7,10 @@
 module Main (main) where
 
 import Network.Wai.Handler.Warp
-import Data.IORef
 import Data.IntMap.Strict (empty)
+import Control.Concurrent.STM.TVar (newTVarIO)
 
 import Purestone.Server.App
 
 main :: IO ()
-main = app <$> newTVarIO empty <*> newIORef [] >>= run 3000
+main = app <$> newTVarIO empty <*> newTVarIO (1, Nothing) >>= run 3000
