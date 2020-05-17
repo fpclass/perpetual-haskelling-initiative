@@ -24,6 +24,8 @@ dependencies:
 - aeson
 - servant-server
 - time
+- random
+- random-shuffle
 
 library:
   source-dirs: src
