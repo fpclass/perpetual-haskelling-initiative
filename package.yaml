@@ -26,6 +26,7 @@ dependencies:
 - time
 - random
 - random-shuffle
+- megaparsec
 
 library:
   source-dirs: src
