@@ -30,10 +30,10 @@ type PurestoneAPI =  "state"     :> Capture "gameID" Int :> Capture "player" Int
                 :<|> "gameReady" :> Capture "gameID" Int :> Get '[JSON] Bool
 
 -- | `server` defines which functions to use to serve the endpoints
-server :: IORef GameStates -> IORef [Deck] -> Server PurestoneAPI
+server :: TVar GameStates -> IORef [Deck] -> Server PurestoneAPI
 server s ds = getState s :<|> makeMove s :<|> connect s ds :<|> gameReady ds
 
 -- | `app` takes the 2 IORefs and creates an `Application` that warp can serve from 
 --   using the `server` function
-app :: IORef GameStates -> IORef [Deck] -> Application
+app :: TVar GameStates -> IORef [Deck] -> Application
 app s ds = serve (Proxy :: Proxy PurestoneAPI) $ server s ds

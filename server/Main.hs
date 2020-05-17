@@ -13,4 +13,4 @@ import Data.IntMap.Strict (empty)
 import Purestone.Server.App
 
 main :: IO ()
-main = app <$> newIORef empty <*> newIORef [] >>= run 3000
+main = app <$> newTVarIO empty <*> newIORef [] >>= run 3000
