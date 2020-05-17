@@ -26,19 +26,19 @@ processMove = undefined
 -- | `draw` takes a player and draws the top card from their deck into their hand
 draw :: Player -> Player
 -- If no cards, the player takes damage equal to amount of overdraws
-draw (Player hp h [] c m bs dp o) = (Player (hp - (o+1)) h [] c m bs dp (o+1))
+draw (Player hp h [] c m bs dp o) = Player (hp - (o+1)) h [] c m bs dp (o+1)
 draw (Player hp h (x:xs) c m bs dp o) = case length h of
-  10 -> (Player hp h xs c m bs dp o) -- If the player has 10 cards, drawn card is lost
-  otherwise -> (Player hp (x:h) xs c m bs dp o)
+  10 -> Player hp h xs c m bs dp o -- If the player has 10 cards, drawn card is lost
+  otherwise -> Player hp (x:h) xs c m bs dp o
 
 -- | `resetPoints` sets the player's current points to their max points
 resetPoints :: Player -> Player
-resetPoints (Player hp h d _ m bs dp o) =  (Player hp h d m m bs dp o)
+resetPoints player@Player{..} =  player { playerCurrentPoints = playerMaximumPoints }
 
 -- | `increasePoints` increases a player's maximum amount of points up to 10
 increasePoints :: Player -> Player
-increasePoints player@(Player _ _ _ _ 10 _ _ _) = player
-increasePoints (Player hp h d c m bs dp o) = (Player hp h d c (m+1) bs dp o)
+increasePoints player@Player{playerMaximumPoints = 10} = player
+increasePoints player@Player{..} = player { playerMaximumPoints = playerMaximumPoints + 1 }
 
 -- | `startTurn` starts a player's turn
 startTurn :: Player -> Player
@@ -47,5 +47,5 @@ startTurn player = resetPoints . increasePoints . draw $ player
 -- | `changeTurn` switches the turn from player 1 to player 2 or player 2 to
 --    player 1 and calls the start turn function for that player
 changeTurn :: Board -> Board
-changeTurn (Board p1 p2 0) = (Board p1 (startTurn p2) 1)
-changeTurn (Board p1 p2 _) = (Board (startTurn p1) p2 0)
+changeTurn (Board p1 p2 0) = Board p1 (startTurn p2) 1
+changeTurn (Board p1 p2 _) = Board (startTurn p1) p2 0
