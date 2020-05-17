@@ -7,9 +7,11 @@
 module Purestone.Server.MakeMove (makeMove) where
 
 import Servant
-import Data.IORef
 import Data.Time.Clock
+import qualified Data.IntMap as IM (lookup, insert)
 import Control.Monad.IO.Class (liftIO)
+import Control.Concurrent.STM (atomically)
+import Control.Concurrent.STM.TVar
 
 import Purestone.Board
 import Purestone.Player
@@ -27,33 +29,30 @@ subsetOf xs ys = null $ filter (not . (`elem` ys)) xs
 -- | `getMoveResponse` checks the user has the cards they want to play
 --   and attempts to play those cards. HTTP400 is returned if the cards
 --   were not valid
-getMoveResponse :: IORef GameState -> Board -> [Card] -> Hand -> Int -> Handler Board
-getMoveResponse s b move hand p = 
+getMoveResponse :: TVar GameStates -> Board -> [Card] -> Hand -> Int -> Int -> Handler Board
+getMoveResponse s b move hand g p = 
     -- Check move is not empty and the user has the cards they want to play
     if not (null move) && move `subsetOf` hand then
         -- Use `prcessMove` to attempt move. If it fails then return HTTP400
         flip (maybe $ throwError err400) (processMove b move p) $ \b' -> do
             -- Update time modified to now, then return sanitised board to user
             time <- liftIO getCurrentTime
-            liftIO $ atomicWriteIORef s (Just b', time, 3-p)
+            liftIO $ atomically $ modifyTVar s $ IM.insert g (b', time, 3-p)
             pure $ sanitiseBoard b' p
     else
         throwError err400
 
 -- | `makeMove` takes the GameState, game ID, player and a list of cards
 --   the player want to play and attempts to play those cards
-makeMove :: IORef GameState -> Int -> Int -> [Card] -> Handler Board
-makeMove s _ p cs = do
-    (b, _, t) <- liftIO $ readIORef s
+makeMove :: TVar GameStates -> Int -> Int -> [Card] -> Handler Board
+makeMove s g p cs = do
+    -- Get GameState of current game (Maybe value)
+    gs <- IM.lookup g <$> liftIO (readTVarIO s)
 
-    -- Check the right player is attempting to move
-    if t /= p then
-        throwError err400
-    else
-        -- If there is no board then return 404 as the game hasn't started, otherwise
-        -- determine response using `getMoveResponse`
-        flip (maybe $ throwError err404) b $ \b'@Board{..} -> 
-            case p of
-                1 -> getMoveResponse s b' cs (playerHand boardPlayer1) 1
-                2 -> getMoveResponse s b' cs (playerHand boardPlayer2) 2
-                _ -> throwError err400
+    -- If there is no board then return 404 as the game hasn't started, otherwise
+    -- determine response using `getMoveResponse`
+    flip (maybe $ throwError err404) gs $ \(b@Board{..}, _, t) ->
+        case p of
+            1 -> getMoveResponse s b cs (playerHand boardPlayer1) g 1
+            2 -> getMoveResponse s b cs (playerHand boardPlayer2) g 2
+            _ -> throwError err400
