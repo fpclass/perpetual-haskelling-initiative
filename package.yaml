@@ -26,6 +26,8 @@ dependencies:
 - time
 - random
 - random-shuffle
+- stm
+- containers
 
 library:
   source-dirs: src
