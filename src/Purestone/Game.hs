@@ -4,7 +4,7 @@
 -- This source code is licensed under the MIT licence found in the           --
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
-module Purestone.Game ( setupGame, processMove, draw, resetPoints,
+module Purestone.Game ( setupGame, processMove, draw, giveCard, resetPoints,
         increasePoints, changeTurn ) where
 
 import Purestone.Board
@@ -14,26 +14,25 @@ import Purestone.Player
 
 import System.Random.Shuffle (shuffleM)
 import System.Random (randomRIO)
-import Control.Monad.IO.Class (liftIO)
-import Servant
 
 -- | `setupGame` takes the 2 players decks (in a list) and creates the initial
 --   board and determines the starting player
-setupGame :: [Deck] -> Handler Board
-setupGame [d1,d2] = do 
-    start <- liftIO $ randomRIO (1,2)
-    shuffled1 <- liftIO $ shuffleM d1
-    shuffled2 <- liftIO $ shuffleM d2
-    player1 <- initPlayer shuffled1
-    player2 <- initPlayer shuffled2
-    return $ Board player1 player2 start
-setupGame _ = throwError err412
-
+setupGame :: (Deck, Deck) -> IO Board
+setupGame (d1,d2) = do 
+    start <- randomRIO (1,2)
+    player1 <- initPlayer <$> shuffleM d1
+    player2 <- initPlayer <$> shuffleM d2
+    return $ case (start) of
+        1 -> Board player1 (giveBonus player2) start
+        _ -> Board (giveBonus player1) player2 start
+        
+        where giveBonus :: Player -> Player
+              giveBonus = flip giveCard coin . draw
+    
 -- | `initPlayer` creates a new Player from a Deck following the specs in the `README`. 
--- The top 3 cards are removed from the deck and placed into the player's hand
-initPlayer :: Deck -> Handler Player
-initPlayer (c1:c2:c3:d) = return $ Player 30 [c1,c2,c3] d 0 10 [] [] 0
-initPlayer _ = throwError err412
+--   The top 3 cards are drawn from the deck and placed into the player's hand
+initPlayer :: Deck -> Player
+initPlayer d = draw . draw . draw $ Player 30 [] d 0 0 [] [] 0
 
 -- | `processMove` takes the current board, the cards to play and the player
 --   number and attempts to perform the move. `Nothing` is returned if this
@@ -48,6 +47,10 @@ draw (Player hp h [] c m bs dp o) = Player (hp - (o+1)) h [] c m bs dp (o+1)
 draw (Player hp h (x:xs) c m bs dp o) = case length h of
   10 -> Player hp h xs c m bs dp o -- If the player has 10 cards, drawn card is lost
   otherwise -> Player hp (x:h) xs c m bs dp o
+
+-- | `giveCard` puts a card into the player's hand
+giveCard :: Player -> Card -> Player
+giveCard player@Player{..} c = player { playerHand = c:playerHand }
 
 -- | `resetPoints` sets the player's current points to their max points
 resetPoints :: Player -> Player

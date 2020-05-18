@@ -4,7 +4,7 @@
 -- This source code is licensed under the MIT licence found in the           --
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
-module Purestone.Card ( Card(..) ) where 
+module Purestone.Card ( Card(..), coin ) where 
 
 -------------------------------------------------------------------------------
 
@@ -18,6 +18,10 @@ import Purestone.Language.Program
 import Purestone.JSON
 
 -------------------------------------------------------------------------------
+
+-- | Extra card given to the player who goes second. See `README`
+coin :: Card
+coin = undefined
 
 -- | Represents cards in the game.
 data Card 
