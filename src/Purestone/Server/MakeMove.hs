@@ -50,9 +50,12 @@ makeMove s g p cs = do
     gs <- IM.lookup g <$> liftIO (readTVarIO s)
 
     -- If there is no board then return 404 as the game hasn't started, otherwise
-    -- determine response using `getMoveResponse`
+    -- determine response using `getMoveResponse`. If the wrong player is trying
+    -- to play then return 403
     flip (maybe $ throwError err404) gs $ \(b@Board{..}, _, t) ->
-        case p of
+        if t /= p then
+            throwError err403
+        else case p of
             1 -> getMoveResponse s b cs (playerHand boardPlayer1) g 1
             2 -> getMoveResponse s b cs (playerHand boardPlayer2) g 2
             _ -> throwError err400
