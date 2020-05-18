@@ -19,11 +19,10 @@ import Purestone.Game
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
 
--- | `connect` will attempt to connect a new user to a game. It takes the IORef
---   of the game state so it can start games, and the IORef of [Deck] which 
---   stores the Deck of players when they join (as the setupGame is only run
---   when the second player has joined, so the Deck of the first player needs
---   to be tracked)
+-- | `connect` will attempt to connect a new user to a game. It takes the TVar
+--   of the game states so it can start games, and the TVar of current start
+--   state which stores the ID for the next game and the deck of the waiting
+--   player if there is one
 connect :: TVar GameStates -> TVar (Int, Maybe Deck) -> Deck -> Handler ConnectResponse
 connect s cd d = do
     (next, held) <- liftIO $ readTVarIO cd
@@ -40,9 +39,9 @@ connect s cd d = do
             liftIO $ atomically $ modifyTVar s $ IM.insert next (board, time, boardTurn board)
             pure $ Connected next 2
 
--- | `gameReady` takes a game ID and will return whether the 
---   game is ready to play. This will be used by clients to 
---   tell when a 2nd player has joined. It does this by checking
---   if the number of Decks stored in the IORef is 2
+-- | `gameReady` takes a game ID and will return whether the game is ready to
+--   play. This will be used by clients to tell when a 2nd player has joined.
+--   It does this by checking if the game ID given exists in the IntMap of game
+--   states.
 gameReady :: TVar GameStates -> Int -> Handler Bool
 gameReady s g = IM.member g <$> liftIO (readTVarIO s)

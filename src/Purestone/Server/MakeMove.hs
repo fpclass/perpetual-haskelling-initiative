@@ -46,7 +46,7 @@ getMoveResponse s b move hand g p =
 --   the player want to play and attempts to play those cards
 makeMove :: TVar GameStates -> Int -> Int -> [Card] -> Handler Board
 makeMove s g p cs = do
-    -- Get GameState of current game (Maybe value)
+    -- Get GameState of game with given ID (Maybe value)
     gs <- IM.lookup g <$> liftIO (readTVarIO s)
 
     -- If there is no board then return 404 as the game hasn't started, otherwise

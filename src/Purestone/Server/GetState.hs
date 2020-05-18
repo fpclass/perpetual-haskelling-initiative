@@ -18,16 +18,17 @@ import Purestone.Server.GameState
 
 -- | `getState` attempts to return the current board if there are changes. If the
 --   player already has the latest changes then HTTP304 is returned. It does this
---   by comparing the time from the `Last-Received-Update` QueryParam to the date
---   of the last change. If this query parameter is missing then the state is 
---   always returned
+--   by comparing the time from the `update` QueryParam to the time of the last
+--   change. If this query parameter is missing then the state is always returned
 getState :: TVar GameStates -> Int -> Int -> Maybe UTCTime -> Handler Board
 getState s g p d = do
+    -- Searches for the GameState of the given game ID in the IntMap of game states
+    -- If the game ID doesn't exist then Nothing is returned
     gs <- IM.lookup g <$> liftIO (readTVarIO s)
 
     -- If there is no board then return 404, otherwise determine response
     flip (maybe $ throwError err404) gs $ \(b, mod, _) -> 
-        case d of 
+        case d of
             Nothing -> pure $ sanitiseBoard b p
             Just date
                 | date < mod -> pure $ sanitiseBoard b p

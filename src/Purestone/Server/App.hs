@@ -33,7 +33,7 @@ type PurestoneAPI =  "state"     :> Capture "gameID" Int :> Capture "player" Int
 server :: TVar GameStates -> TVar (Int, Maybe Deck) -> Server PurestoneAPI
 server s ds = getState s :<|> makeMove s :<|> connect s ds :<|> gameReady s
 
--- | `app` takes the 2 IORefs and creates an `Application` that warp can serve from 
+-- | `app` takes the 2 TVars and creates an `Application` that warp can serve from 
 --   using the `server` function
 app :: TVar GameStates -> TVar (Int, Maybe Deck) -> Application
 app s ds = serve (Proxy :: Proxy PurestoneAPI) $ server s ds
