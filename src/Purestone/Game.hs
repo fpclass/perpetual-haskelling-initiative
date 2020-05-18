@@ -11,9 +11,9 @@ import Purestone.Board
 import Purestone.Card
 import Purestone.Deck
 import Purestone.Player
-import Purestone.Random ( shuffleIO )
 
-import System.Random ( randomRIO )
+import System.Random.Shuffle (shuffleM)
+import System.Random (randomRIO)
 import Control.Monad.IO.Class (liftIO)
 import Servant
 
@@ -22,8 +22,8 @@ import Servant
 setupGame :: [Deck] -> Handler Board
 setupGame [d1,d2] = do 
     start <- liftIO $ randomRIO (1,2)
-    shuffled1 <- liftIO $ shuffleIO d1
-    shuffled2 <- liftIO $ shuffleIO d2
+    shuffled1 <- liftIO $ shuffleM d1
+    shuffled2 <- liftIO $ shuffleM d2
     player1 <- initPlayer shuffled1
     player2 <- initPlayer shuffled2
     return $ Board player1 player2 start
