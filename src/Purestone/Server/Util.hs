@@ -34,7 +34,7 @@ connect s ds d = do
             liftIO $ atomicWriteIORef ds [d1, d]
             time <- liftIO getCurrentTime
 
-            board <- liftIO $ setupGame (d1, d)
+            board <- setupGame (d1, d)
             liftIO $ atomicWriteIORef s (Just board, time, boardTurn board)
             pure $ Connected 1 2
 

@@ -14,14 +14,15 @@ import Purestone.Player
 
 import System.Random.Shuffle (shuffleM)
 import System.Random (randomRIO)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 
 -- | `setupGame` takes the 2 players decks (in a list) and creates the initial
 --   board and determines the starting player
-setupGame :: (Deck, Deck) -> IO Board
+setupGame :: MonadIO m => (Deck, Deck) -> m Board
 setupGame (d1,d2) = do 
-    start <- randomRIO (1,2)
-    player1 <- initPlayer <$> shuffleM d1
-    player2 <- initPlayer <$> shuffleM d2
+    start <- liftIO $ randomRIO (1,2)
+    player1 <- initPlayer <$> liftIO (shuffleM d1)
+    player2 <- initPlayer <$> liftIO (shuffleM d2)
     return $ case (start) of
         1 -> Board player1 (giveBonus player2) start
         _ -> Board (giveBonus player1) player2 start
