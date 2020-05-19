@@ -22,7 +22,8 @@ data Board
         -- | The first player in a match
         boardPlayer1 :: Player,
         -- | The second player in a match
-        boardPlayer2 :: Player
+        boardPlayer2 :: Player,
+        boardTurn :: Int
     } deriving (Eq, Show, Generic)
 
 instance FromJSON Board where
