@@ -37,7 +37,7 @@ getMoveResponse s b move hand g p =
         flip (maybe $ throwError err400) (processMove b move p) $ \b' -> do
             -- Update time modified to now, then return sanitised board to user
             time <- liftIO getCurrentTime
-            liftIO $ atomically $ modifyTVar s $ IM.insert g (b', time, 3-p)
+            liftIO $ atomically $ modifyTVar s $ IM.insert g (b', time)
             pure $ sanitiseBoard b' p
     else
         throwError err400
@@ -52,8 +52,8 @@ makeMove s g p cs = do
     -- If there is no board then return 404 as the game hasn't started, otherwise
     -- determine response using `getMoveResponse`. If the wrong player is trying
     -- to play then return 403
-    flip (maybe $ throwError err404) gs $ \(b@Board{..}, _, t) ->
-        if t /= p then
+    flip (maybe $ throwError err404) gs $ \(b@Board{..}, _) ->
+        if boardTurn /= p then
             throwError err403
         else case p of
             1 -> getMoveResponse s b cs (playerHand boardPlayer1) g 1

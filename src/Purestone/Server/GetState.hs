@@ -27,7 +27,7 @@ getState s g p d = do
     gs <- IM.lookup g <$> liftIO (readTVarIO s)
 
     -- If there is no board then return 404, otherwise determine response
-    flip (maybe $ throwError err404) gs $ \(b, mod, _) -> 
+    flip (maybe $ throwError err404) gs $ \(b, mod) -> 
         case d of
             Nothing -> pure $ sanitiseBoard b p
             Just date

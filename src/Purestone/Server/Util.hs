@@ -14,7 +14,6 @@ import Control.Concurrent.STM (atomically)
 import Control.Concurrent.STM.TVar
 
 import Purestone.Deck
-import Purestone.Board
 import Purestone.Game
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
@@ -36,7 +35,7 @@ connect s cd d = do
 
             time <- liftIO getCurrentTime
             board <- setupGame (d1, d)
-            liftIO $ atomically $ modifyTVar s $ IM.insert next (board, time, boardTurn board)
+            liftIO $ atomically $ modifyTVar s $ IM.insert next (board, time)
             pure $ Connected next 2
 
 -- | `gameReady` takes a game ID and will return whether the game is ready to
