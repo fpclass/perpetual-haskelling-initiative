@@ -5,7 +5,7 @@
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
 -- | This module contains representations of 
-module Purestone.Language.Program ( Action, Instr(..) ) where 
+module Purestone.Language.Action ( Action, Instr(..) ) where 
 
 -------------------------------------------------------------------------------
 import GHC.Generics
@@ -18,8 +18,13 @@ type Action = [Instr]
 
 -- | Represents instructions that can be used to program cards with.
 data Instr 
-    = Attack Int
-    | Heal Int 
+    = Attack Int    -- Does (Int) damage to target
+    | Heal Int      -- Heals (Int) damage to target
+    | Draw Int      -- Draw (Int) number of cards
+    | Delete        -- Removes target program from play
+    | Mute          -- Remove all text from a target program
+    | Reset         -- Return target program to owners hand
+    | Chown         -- Gain control of a target program 
     deriving (Eq, Show, Generic)
 
 instance FromJSON Instr where

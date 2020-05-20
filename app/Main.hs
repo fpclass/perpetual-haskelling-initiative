@@ -21,14 +21,11 @@ import System.FilePath
 import Control.Monad (forM, (>=>))
 
 import Purestone.Card
-import Purestone.Language.Program
+import Purestone.Deck
+import Purestone.Paradigm
+import Purestone.Language.Interpreter
 
--- Temporary Definitions - When relavant definitions are defined in library this
--- will be removed
-type Deck = [Card]
-parseProg :: [String] -> Maybe Action
-parseProg _ = Just [Attack 10]
-
+-- | Defines the number of cards that should be in a deck
 cardsInDeck :: Int
 cardsInDeck = 10
 
@@ -58,10 +55,10 @@ makeCard :: Maybe Card -> IO Card
 makeCard c = do
     name <- prompt "\nEnter Card Name" $ cardName <$> c
     desc <- prompt "\nEnter Card Description" $ cardDescription <$> c
-    -- (mapM readMaybe) passes a list of strings to a list of Paradigms if possible. Since paradigms is NonEmpty not [] it must
-    -- be converted to a list and then from a list again after
-    paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" (mapM readMaybe) $ NE.toList . cardParadigms <$> c
-    act <- promptMult "\nEnter Card Action:" parseProg $ cardAction <$> c
+    -- (mapM readEither) passes a list of strings to a list of Paradigms if possible. Since paradigms
+    -- is NonEmpty not [] it must be converted to a list and then from a list again after
+    paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" processParadigms $ NE.toList . cardParadigms <$> c
+    act <- promptMult "\nEnter Card Action:" interpreter $ cardAction <$> c
 
     cardType <- getCardType c
     
@@ -108,7 +105,7 @@ makeCard c = do
 
         -- | `promptMult` takes a prompt, a minimum length, a parsing function and optionally a default
         --   value and gets a valid list of the given type
-        promptMult :: (Show a) => String -> ([String] -> Maybe [a]) -> Maybe [a] -> IO [a]
+        promptMult :: (Show a) => String -> ([String] -> Either String [a]) -> Maybe [a] -> IO [a]
         promptMult s parse d = do
             putStr s
             putStrLn $ maybe "" (\x -> " (" <> x <> "):") $ show <$> d
@@ -118,8 +115,8 @@ makeCard c = do
             let parsedInput = parse input
 
             case parsedInput of
-                Nothing -> putStrLn "Invalid Input" >> promptMult s parse d
-                Just i
+                Left err -> putStrLn err >> promptMult s parse d
+                Right i
                     | null i -> maybe (putStrLn "Input Cannot Be Blank" >> promptMult s parse d) pure d
                     | otherwise -> pure i 
         
@@ -134,6 +131,7 @@ makeCard c = do
                 xs <- getLines
                 return (x:xs)
 
+        -- | `getCardType` gets the card type from the user
         getCardType :: Maybe Card -> IO Char
         getCardType d = do
             putStr "\nEnter Card Type:"
@@ -152,6 +150,11 @@ makeCard c = do
                 "E" -> pure 'E'
                 ""  -> maybe (putStrLn "Input Cannot Be Blank" >> getCardType d) pure defaultVal
                 _   -> putStrLn "Invalid Input - Enter P, S or E" >> getCardType d 
+        
+        -- | `processParadigms` attempts to parse the given paradigms. If it fails then 
+        --   Left "Inavlid Paradigm" is returned
+        processParadigms :: [String] -> Either String [Paradigm]
+        processParadigms ss = maybe (Left "Invalid Paradigm") Right $ mapM readMaybe ss
 
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
