@@ -131,6 +131,7 @@ makeCard c = do
                 xs <- getLines
                 return (x:xs)
 
+        -- | `getCardType` gets the card type from the user
         getCardType :: Maybe Card -> IO Char
         getCardType d = do
             putStr "\nEnter Card Type:"
@@ -150,6 +151,8 @@ makeCard c = do
                 ""  -> maybe (putStrLn "Input Cannot Be Blank" >> getCardType d) pure defaultVal
                 _   -> putStrLn "Invalid Input - Enter P, S or E" >> getCardType d 
         
+        -- | `processParadigms` attempts to parse the given paradigms. If it fails then 
+        --   Left "Inavlid Paradigm" is returned
         processParadigms :: [String] -> Either String [Paradigm]
         processParadigms ss = maybe (Left "Invalid Paradigm") Right $ mapM readMaybe ss
 
