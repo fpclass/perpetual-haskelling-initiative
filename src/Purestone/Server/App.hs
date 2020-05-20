@@ -11,8 +11,8 @@ module Purestone.Server.App (app) where
 
 import Servant.Server
 import Servant
-import Data.IORef
 import Data.Time.Clock
+import Control.Concurrent.STM.TVar
 
 import Purestone.Board
 import Purestone.Card
@@ -30,10 +30,10 @@ type PurestoneAPI =  "state"     :> Capture "gameID" Int :> Capture "player" Int
                 :<|> "gameReady" :> Capture "gameID" Int :> Get '[JSON] Bool
 
 -- | `server` defines which functions to use to serve the endpoints
-server :: IORef GameState -> IORef [Deck] -> Server PurestoneAPI
-server s ds = getState s :<|> makeMove s :<|> connect s ds :<|> gameReady ds
+server :: TVar GameStates -> TVar (Int, Maybe Deck) -> Server PurestoneAPI
+server s ds = getState s :<|> makeMove s :<|> connect s ds :<|> gameReady s
 
--- | `app` takes the 2 IORefs and creates an `Application` that warp can serve from 
+-- | `app` takes the 2 TVars and creates an `Application` that warp can serve from 
 --   using the `server` function
-app :: IORef GameState -> IORef [Deck] -> Application
+app :: TVar GameStates -> TVar (Int, Maybe Deck) -> Application
 app s ds = serve (Proxy :: Proxy PurestoneAPI) $ server s ds

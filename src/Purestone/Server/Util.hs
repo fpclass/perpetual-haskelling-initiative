@@ -7,42 +7,38 @@
 module Purestone.Server.Util ( connect, gameReady ) where
 
 import Servant
-import Data.IORef
 import Data.Time.Clock
+import qualified Data.IntMap as IM 
 import Control.Monad.IO.Class (liftIO)
+import Control.Concurrent.STM (atomically)
+import Control.Concurrent.STM.TVar
 
 import Purestone.Deck
-import Purestone.Board
 import Purestone.Game
 import Purestone.Server.ConnectResponse
 import Purestone.Server.GameState
 
--- | `connect` will attempt to connect a new user to a game. It takes the IORef
---   of the game state so it can start games, and the IORef of [Deck] which 
---   stores the Deck of players when they join (as the setupGame is only run
---   when the second player has joined, so the Deck of the first player needs
---   to be tracked)
-connect :: IORef GameState -> IORef [Deck] -> Deck -> Handler ConnectResponse
-connect s ds d = do
-    decks <- liftIO $ readIORef ds
-    case decks of
-        [] -> do
-            liftIO $ atomicWriteIORef ds [d]
-            pure $ Connected 1 1
+-- | `connect` will attempt to connect a new user to a game. It takes the TVar
+--   of the game states so it can start games, and the TVar of current start
+--   state which stores the ID for the next game and the deck of the waiting
+--   player if there is one
+connect :: TVar GameStates -> TVar (Int, Maybe Deck) -> Deck -> Handler ConnectResponse
+connect s cd d = do
+    (next, held) <- liftIO $ readTVarIO cd
+    case held of
+        Nothing -> do
+            liftIO $ atomically $ writeTVar cd (next, Just d)
+            pure $ Connected next 1
 
-        [d1] -> do
-            liftIO $ atomicWriteIORef ds [d1, d]
+        Just d1 -> do
+            liftIO $ atomically $ writeTVar cd (next + 1, Nothing)
+
             time <- liftIO getCurrentTime
-
             board <- setupGame (d1, d)
-            liftIO $ atomicWriteIORef s (Just board, time, boardTurn board)
-            pure $ Connected 1 2
+            liftIO $ atomically $ modifyTVar s $ IM.insert next (board, time)
+            pure $ Connected next 2
 
-        _ -> throwError err409
-
--- | `gameReady` takes a game ID and will return whether the 
---   game is ready to play. This will be used by clients to 
---   tell when a 2nd player has joined. It does this by checking
---   if the number of Decks stored in the IORef is 2
-gameReady :: IORef [Deck] -> Int -> Handler Bool
-gameReady ds _ = (==2) . length <$> liftIO (readIORef ds)
+-- | `gameReady` takes a game ID and will return whether the game is ready to
+--   play. This will be used by clients to tell when a 2nd player has joined.
+gameReady :: TVar GameStates -> Int -> Handler Bool
+gameReady s g = IM.member g <$> liftIO (readTVarIO s)

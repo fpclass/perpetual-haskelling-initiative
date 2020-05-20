@@ -23,6 +23,7 @@ data Board
         boardPlayer1 :: Player,
         -- | The second player in a match
         boardPlayer2 :: Player,
+        -- | The player whose turn it currently is
         boardTurn :: Int
     } deriving (Eq, Show, Generic)
 

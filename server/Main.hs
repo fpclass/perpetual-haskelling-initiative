@@ -7,12 +7,11 @@
 module Main (main) where
 
 import Network.Wai.Handler.Warp
-import Data.IORef
-import Data.Time.Clock
+import qualified Data.IntMap.Strict as IM (empty)
+import Control.Concurrent.STM.TVar (newTVarIO)
 
 import Purestone.Server.App
 
+-- | Entry point for the server executable
 main :: IO ()
-main = do
-    time <- getCurrentTime
-    app <$> newIORef (Nothing, time, -1) <*> newIORef [] >>= run 3000
+main = app <$> newTVarIO IM.empty <*> newTVarIO (1, Nothing) >>= run 3000

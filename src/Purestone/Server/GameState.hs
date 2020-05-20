@@ -7,9 +7,13 @@
 module Purestone.Server.GameState where
 
 import Data.Time.Clock
+import Data.IntMap
 
 import Purestone.Board
 
--- | Represents the current board, whether player 1/player 2 has yet to receive the 
---   most recent changes and which player's turn it is
-type GameState = (Maybe Board, UTCTime, Int)
+-- | Represents all the current GameStates in the form of an IntMap
+type GameStates = IntMap GameState
+
+-- | Represents the current board, and whether player 1/player 2 has yet to
+--   receive the most recent changes
+type GameState = (Board, UTCTime)
