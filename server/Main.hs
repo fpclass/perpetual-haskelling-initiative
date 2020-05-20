@@ -7,7 +7,7 @@
 module Main (main) where
 
 import Network.Wai.Handler.Warp
-import Data.IntMap.Strict (empty)
+import qualified Data.IntMap.Strict as IM (empty)
 import Control.Concurrent.STM.TVar (newTVarIO)
 
 import Purestone.Server.App
@@ -15,4 +15,4 @@ import Purestone.Server.App
 -- | Entry point for the server executable. Creates the 2 TVars used by the 
 --   program and uses `warp` to deploy the API
 main :: IO ()
-main = app <$> newTVarIO empty <*> newTVarIO (1, Nothing) >>= run 3000
+main = app <$> newTVarIO IM.empty <*> newTVarIO (1, Nothing) >>= run 3000
