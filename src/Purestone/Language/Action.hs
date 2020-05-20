@@ -5,7 +5,7 @@
 -- LICENSE file in the root directory of this source tree.                   --
 -------------------------------------------------------------------------------
 -- | This module contains representations of 
-module Purestone.Language.Program ( Action, Instr(..) ) where 
+module Purestone.Language.Action ( Action, Instr(..) ) where 
 
 -------------------------------------------------------------------------------
 import GHC.Generics

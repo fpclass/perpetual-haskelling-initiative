@@ -14,7 +14,7 @@ import Data.Aeson
 import GHC.Generics
 
 import Purestone.Paradigm
-import Purestone.Language.Program
+import Purestone.Language.Action
 import Purestone.JSON
 
 -------------------------------------------------------------------------------

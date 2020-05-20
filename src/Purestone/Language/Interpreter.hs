@@ -9,7 +9,7 @@ module Purestone.Language.Interpreter where
 
 -------------------------------------------------------------------------------
 
-import Purestone.Language.Program
+import Purestone.Language.Action
 
 import Data.Void
 import Data.Either
