@@ -16,14 +16,14 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as T (putStrLn, getLine)
 import qualified Data.List.NonEmpty as NE
 import Data.List (nub)
-import Text.Read (readEither)
+import Text.Read (readMaybe)
 import System.FilePath
 import Control.Monad (forM, (>=>))
 
 import Purestone.Card
 import Purestone.Deck
+import Purestone.Paradigm
 import Purestone.Language.Interpreter
-import Purestone.Language.Action
 
 -- | Defines the number of cards that should be in a deck
 cardsInDeck :: Int
@@ -57,7 +57,7 @@ makeCard c = do
     desc <- prompt "\nEnter Card Description" $ cardDescription <$> c
     -- (mapM readEither) passes a list of strings to a list of Paradigms if possible. Since paradigms
     -- is NonEmpty not [] it must be converted to a list and then from a list again after
-    paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" (mapM readEither) $ NE.toList . cardParadigms <$> c
+    paras <- fmap NE.fromList $ promptMult "\nEnter Card Paradigms:" processParadigms $ NE.toList . cardParadigms <$> c
     act <- promptMult "\nEnter Card Action:" interpreter $ cardAction <$> c
 
     cardType <- getCardType c
@@ -149,6 +149,9 @@ makeCard c = do
                 "E" -> pure 'E'
                 ""  -> maybe (putStrLn "Input Cannot Be Blank" >> getCardType d) pure defaultVal
                 _   -> putStrLn "Invalid Input - Enter P, S or E" >> getCardType d 
+        
+        processParadigms :: [String] -> Either String [Paradigm]
+        processParadigms ss = maybe (Left "Invalid Paradigm") Right $ mapM readMaybe ss
 
 -- | `createNewDeck` is a computation which tries to create a new deck
 createNewDeck :: IO Deck
