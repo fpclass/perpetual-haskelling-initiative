@@ -16,10 +16,10 @@ import Purestone.Board
 import Purestone.Server.Sanitise
 import Purestone.Server.GameState
 
--- | `getState` attempts to return the current board if there are changes. If the
---   player already has the latest changes then HTTP304 is returned. It does this
---   by comparing the time from the `update` QueryParam to the time of the last
---   change. If this query parameter is missing then the state is always returned
+-- | `getState` attempts to return the current board if there are changes. It takes 
+--   a QueryParam `update` and only returns the state if the latest change is after
+--   the time sepecified in this query param, otherwise it returns HTTP304. If this 
+--   query parameter is missing then the state is always returned
 getState :: TVar GameStates -> Int -> Int -> Maybe UTCTime -> Handler Board
 getState s g p d = do
     -- Searches for the GameState of the given game ID in the IntMap of game states

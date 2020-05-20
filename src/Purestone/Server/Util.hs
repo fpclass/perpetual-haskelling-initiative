@@ -40,7 +40,5 @@ connect s cd d = do
 
 -- | `gameReady` takes a game ID and will return whether the game is ready to
 --   play. This will be used by clients to tell when a 2nd player has joined.
---   It does this by checking if the game ID given exists in the IntMap of game
---   states.
 gameReady :: TVar GameStates -> Int -> Handler Bool
 gameReady s g = IM.member g <$> liftIO (readTVarIO s)

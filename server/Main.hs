@@ -12,7 +12,6 @@ import Control.Concurrent.STM.TVar (newTVarIO)
 
 import Purestone.Server.App
 
--- | Entry point for the server executable. Creates the 2 TVars used by the 
---   program and uses `warp` to deploy the API
+-- | Entry point for the server executable
 main :: IO ()
 main = app <$> newTVarIO IM.empty <*> newTVarIO (1, Nothing) >>= run 3000
